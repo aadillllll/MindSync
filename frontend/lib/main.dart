@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'core/theme/app_theme.dart';
+
 void main() {
   runApp(const MindSyncApp());
 }
@@ -10,34 +12,11 @@ class MindSyncApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'MindSync',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        useMaterial3: true,
-        colorSchemeSeed: Colors.indigo,
-      ),
-      home: const DashboardScreen(),
-    );
-  }
-}
-
-class DashboardScreen extends StatelessWidget {
-  const DashboardScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('MindSync'),
-      ),
-      body: const Center(
-        child: Text(
-          'Welcome to MindSync',
-          style: TextStyle(
-            fontSize: 28,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+      title: 'MindSync',
+      theme: AppTheme.darkTheme,
+      home: const Scaffold(
+        body: Center(child: Text('MindSync', style: TextStyle(fontSize: 28))),
       ),
     );
   }
