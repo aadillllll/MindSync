@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/theme/app_text_styles.dart';
+
+import '../models/quick_action_dummy_data.dart';
 import 'quick_action_card.dart';
 
 class QuickActions extends StatelessWidget {
@@ -10,49 +13,27 @@ class QuickActions extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           "Quick Actions",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 26,
+          style: AppTextStyles.title.copyWith(
+            fontSize: 22,
             fontWeight: FontWeight.bold,
           ),
         ),
 
-        const SizedBox(height: 20),
+        const SizedBox(height: 18),
 
         Row(
-          children: [
-            QuickActionCard(
-              icon: Icons.check_circle_outline,
-              title: "Tasks",
-              onTap: () {},
-            ),
-
-            const SizedBox(width: 16),
-
-            QuickActionCard(
-              icon: Icons.calendar_today,
-              title: "Calendar",
-              onTap: () {},
-            ),
-          ],
-        ),
-
-        const SizedBox(height: 16),
-
-        Row(
-          children: [
-            QuickActionCard(
-              icon: Icons.flag_outlined,
-              title: "Goals",
-              onTap: () {},
-            ),
-
-            const SizedBox(width: 16),
-
-            QuickActionCard(icon: Icons.notes, title: "Notes", onTap: () {}),
-          ],
+          children: quickActions
+              .map(
+                (action) => QuickActionCard(
+                  title: action.title,
+                  icon: action.icon,
+                  gradient: action.gradient,
+                  onTap: () {},
+                ),
+              )
+              .toList(),
         ),
       ],
     );
