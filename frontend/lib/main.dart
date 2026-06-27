@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'core/theme/app_theme.dart';
+import 'features/home/screens/home_screen.dart';
 
 void main() {
   runApp(const MindSyncApp());
@@ -15,9 +16,7 @@ class MindSyncApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'MindSync',
       theme: AppTheme.darkTheme,
-      home: const Scaffold(
-        body: Center(child: Text('MindSync', style: TextStyle(fontSize: 28))),
-      ),
+      home: const HomeScreen(),
     );
   }
 }
