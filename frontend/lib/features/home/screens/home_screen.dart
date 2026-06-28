@@ -10,6 +10,7 @@ import '../widgets/schedule_section.dart';
 import '../widgets/habits_card.dart';
 import '../widgets/quick_actions.dart';
 import '../widgets/ai_assistant_card.dart';
+import '../widgets/productivity_section.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -52,6 +53,11 @@ class HomeScreen extends StatelessWidget {
 
                 /// Habits
                 const HabitsCard(),
+                const SizedBox(height: 30),
+
+                const ProductivitySection(),
+
+                const SizedBox(height: 50),
 
                 const SizedBox(height: 28),
 
