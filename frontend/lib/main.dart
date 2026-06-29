@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'core/theme/app_theme.dart';
-import 'features/home/screens/home_screen.dart';
 import 'app/main_screen.dart';
+import 'core/theme/app_theme.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
   runApp(const MindSyncApp());
 }
 
@@ -14,9 +15,11 @@ class MindSyncApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
       title: 'MindSync',
+      debugShowCheckedModeBanner: false,
+
       theme: AppTheme.darkTheme,
+
       home: const MainScreen(),
     );
   }
