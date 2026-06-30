@@ -4,7 +4,7 @@ class ProductivityRing extends StatelessWidget {
   final double progress;
   final int percentage;
 
-  ProductivityRing({
+  const ProductivityRing({
     super.key,
     required this.progress,
     required this.percentage,
@@ -24,7 +24,7 @@ class ProductivityRing extends StatelessWidget {
             child: CircularProgressIndicator(
               value: progress,
               strokeWidth: 10,
-              backgroundColor: Colors.white.withValues(alpha: 0.08),
+              backgroundColor: Colors.white.withOpacity(.08),
               valueColor: const AlwaysStoppedAnimation(Color(0xFF7C5CFF)),
             ),
           ),
@@ -33,11 +33,11 @@ class ProductivityRing extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "$percentage%",
+                '$percentage%',
                 style: const TextStyle(
-                  color: Colors.white,
                   fontSize: 34,
                   fontWeight: FontWeight.bold,
+                  color: Colors.white,
                 ),
               ),
 
