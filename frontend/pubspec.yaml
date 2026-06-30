@@ -101,6 +101,6 @@ flutter:
     - .env
     - assets/icons/
     - assets/images/
-    - assets/logos/
+    - assets/images/logos/
 
   # Fonts will be added later

@@ -3,10 +3,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'app/main_screen.dart';
 import 'core/theme/app_theme.dart';
 import 'features/auth/providers/auth_provider.dart';
-import 'features/auth/screens/login_screen.dart';
+import 'features/splash/screens/splash_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,28 +31,10 @@ class MindSyncApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'MindSync',
         theme: AppTheme.darkTheme,
-        home: const AuthGate(),
+
+        // App starts from Splash Screen
+        home: const SplashScreen(),
       ),
-    );
-  }
-}
-
-class AuthGate extends StatelessWidget {
-  const AuthGate({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<AuthState>(
-      stream: Supabase.instance.client.auth.onAuthStateChange,
-      builder: (context, snapshot) {
-        final session = Supabase.instance.client.auth.currentSession;
-
-        if (session != null) {
-          return const MainScreen();
-        }
-
-        return const LoginScreen();
-      },
     );
   }
 }

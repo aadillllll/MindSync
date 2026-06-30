@@ -60,34 +60,41 @@ class _LoginScreenState extends State<LoginScreen> {
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
+            padding: const EdgeInsets.symmetric(horizontal: 28),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Icon(
-                  Icons.psychology_alt_rounded,
-                  color: Color(0xFF7C5CFF),
-                  size: 80,
+                Center(
+                  child: Image.asset(
+                    'assets/images/logos/MindSync_Logo.png',
+                    width: 230,
+                    fit: BoxFit.contain,
+                  ),
                 ),
 
-                const SizedBox(height: 24),
+                const SizedBox(height: 32),
 
                 const Text(
                   "Welcome Back",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 28,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 0.5,
                   ),
                 ),
 
-                const SizedBox(height: 8),
+                const SizedBox(height: 10),
 
                 const Text(
                   "Sign in to continue to MindSync",
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.white70, fontSize: 15),
+                  style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 15,
+                    height: 1.5,
+                  ),
                 ),
 
                 const SizedBox(height: 40),
@@ -106,7 +113,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     filled: true,
                     fillColor: const Color(0xFF182135),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(18),
                       borderSide: BorderSide.none,
                     ),
                   ),
@@ -141,7 +148,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     filled: true,
                     fillColor: const Color(0xFF182135),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(18),
                       borderSide: BorderSide.none,
                     ),
                   ),
@@ -157,27 +164,30 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                     child: const Text(
                       "Forgot Password?",
-                      style: TextStyle(color: Color(0xFF7C5CFF)),
+                      style: TextStyle(
+                        color: Color(0xFF7C5CFF),
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ),
 
-                const SizedBox(height: 10),
+                const SizedBox(height: 12),
 
                 SizedBox(
-                  height: 56,
+                  height: 58,
                   child: ElevatedButton(
                     onPressed: authProvider.isLoading ? null : _login,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF7C5CFF),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(18),
                       ),
                     ),
                     child: authProvider.isLoading
                         ? const SizedBox(
-                            width: 22,
-                            height: 22,
+                            width: 24,
+                            height: 24,
                             child: CircularProgressIndicator(
                               strokeWidth: 2,
                               color: Colors.white,
@@ -185,12 +195,16 @@ class _LoginScreenState extends State<LoginScreen> {
                           )
                         : const Text(
                             "Login",
-                            style: TextStyle(fontSize: 18, color: Colors.white),
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                   ),
                 ),
 
-                const SizedBox(height: 20),
+                const SizedBox(height: 24),
 
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
