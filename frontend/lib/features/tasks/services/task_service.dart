@@ -55,7 +55,22 @@ class TaskService {
   Future<void> deleteTask(String taskId) async {
     await _supabase.from('tasks').delete().eq('id', taskId);
   }
+  //Mark as completed
 
+  // =========================================================
+  // Mark Task Completed
+  // =========================================================
+
+  Future<void> markTaskCompleted(String taskId) async {
+    await _supabase
+        .from('tasks')
+        .update({
+          'status': 'Completed',
+          'is_completed': true,
+          'updated_at': DateTime.now().toIso8601String(),
+        })
+        .eq('id', taskId);
+  }
   // =========================================================
   // Get Single Task
   // =========================================================

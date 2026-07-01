@@ -4,6 +4,9 @@ import 'package:intl/intl.dart';
 import '../models/task_model.dart';
 import '../widgets/priority_chip.dart';
 import '../widgets/status_chip.dart';
+import 'edit_task_screen.dart';
+import 'package:provider/provider.dart';
+import '../providers/task_provider.dart';
 
 class TaskDetailsScreen extends StatelessWidget {
   final TaskModel task;
@@ -107,8 +110,17 @@ class TaskDetailsScreen extends StatelessWidget {
               width: double.infinity,
               height: 56,
               child: ElevatedButton.icon(
-                onPressed: () {
-                  // Edit Task (next step)
+                onPressed: () async {
+                  final updated = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => EditTaskScreen(task: task),
+                    ),
+                  );
+
+                  if (updated == true && context.mounted) {
+                    Navigator.pop(context, true);
+                  }
                 },
                 icon: const Icon(Icons.edit_rounded),
                 label: const Text("Edit Task"),
@@ -121,8 +133,35 @@ class TaskDetailsScreen extends StatelessWidget {
               width: double.infinity,
               height: 56,
               child: OutlinedButton.icon(
-                onPressed: () {
-                  // Mark Complete (next step)
+                onPressed: () async {
+                  if ((task.status ?? "").toLowerCase() == "completed") {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Task is already completed."),
+                      ),
+                    );
+                    return;
+                  }
+
+                  final provider = context.read<TaskProvider>();
+
+                  final success = await provider.markTaskCompleted(task.id);
+
+                  if (!context.mounted) return;
+
+                  if (success) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Task marked as completed."),
+                      ),
+                    );
+
+                    Navigator.pop(context, true);
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Failed to update task.")),
+                    );
+                  }
                 },
                 icon: const Icon(Icons.check_circle_outline),
                 label: const Text("Mark as Completed"),
@@ -138,8 +177,54 @@ class TaskDetailsScreen extends StatelessWidget {
                 style: FilledButton.styleFrom(
                   backgroundColor: Colors.red.withValues(alpha: 0.15),
                 ),
-                onPressed: () {
-                  // Delete Task (next step)
+                onPressed: () async {
+                  final shouldDelete = await showDialog<bool>(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text("Delete Task"),
+                        content: const Text(
+                          "Are you sure you want to delete this task?\n\nThis action cannot be undone.",
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context, false);
+                            },
+                            child: const Text("Cancel"),
+                          ),
+                          FilledButton(
+                            onPressed: () {
+                              Navigator.pop(context, true);
+                            },
+                            child: const Text("Delete"),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+
+                  if (shouldDelete != true) return;
+
+                  final provider = context.read<TaskProvider>();
+
+                  final success = await provider.deleteTask(task.id);
+
+                  if (!context.mounted) return;
+
+                  if (success) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Task deleted successfully."),
+                      ),
+                    );
+
+                    Navigator.pop(context, true);
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Failed to delete task.")),
+                    );
+                  }
                 },
                 icon: const Icon(Icons.delete_outline, color: Colors.red),
                 label: const Text(

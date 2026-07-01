@@ -65,6 +65,19 @@ class TaskProvider extends ChangeNotifier {
     }
   }
 
+  Future<bool> markTaskCompleted(String taskId) async {
+    try {
+      await _taskService.markTaskCompleted(taskId);
+
+      await loadTasks();
+
+      return true;
+    } catch (e) {
+      debugPrint("Mark Completed Error: $e");
+      return false;
+    }
+  }
+
   // =========================================================
   // Delete Task
   // =========================================================

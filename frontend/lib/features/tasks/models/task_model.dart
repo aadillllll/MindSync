@@ -8,6 +8,8 @@ class TaskModel {
   final String? priority;
   final String? status;
 
+  final bool isCompleted;
+
   final DateTime? dueDate;
 
   final DateTime? createdAt;
@@ -20,6 +22,7 @@ class TaskModel {
     this.description,
     this.priority,
     this.status,
+    this.isCompleted = false,
     this.dueDate,
     this.createdAt,
     this.updatedAt,
@@ -27,22 +30,17 @@ class TaskModel {
 
   factory TaskModel.fromMap(Map<String, dynamic> map) {
     return TaskModel(
-      id: map['id'] as String,
-      userId: map['user_id'] as String,
-
-      title: map['title'] as String,
-
-      description: map['description'] as String?,
-
-      priority: map['priority'] as String?,
-      status: map['status'] as String?,
-
+      id: map['id'],
+      userId: map['user_id'],
+      title: map['title'],
+      description: map['description'],
+      priority: map['priority'],
+      status: map['status'],
+      isCompleted: map['is_completed'] ?? false,
       dueDate: map['due_date'] != null ? DateTime.parse(map['due_date']) : null,
-
       createdAt: map['created_at'] != null
           ? DateTime.parse(map['created_at'])
           : null,
-
       updatedAt: map['updated_at'] != null
           ? DateTime.parse(map['updated_at'])
           : null,
@@ -53,82 +51,62 @@ class TaskModel {
     return {
       'id': id,
       'user_id': userId,
-
       'title': title,
       'description': description,
-
       'priority': priority,
       'status': status,
-
+      'is_completed': isCompleted,
       'due_date': dueDate?.toIso8601String(),
-
       'created_at': createdAt?.toIso8601String(),
       'updated_at': updatedAt?.toIso8601String(),
+    };
+  }
+
+  Map<String, dynamic> toInsertMap() {
+    return {
+      'user_id': userId,
+      'title': title,
+      'description': description,
+      'priority': priority,
+      'status': status,
+      'is_completed': isCompleted,
+      'due_date': dueDate?.toIso8601String(),
     };
   }
 
   TaskModel copyWith({
     String? id,
     String? userId,
-
     String? title,
     String? description,
-
     String? priority,
     String? status,
-
+    bool? isCompleted,
     DateTime? dueDate,
-
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
     return TaskModel(
       id: id ?? this.id,
       userId: userId ?? this.userId,
-
       title: title ?? this.title,
       description: description ?? this.description,
-
       priority: priority ?? this.priority,
       status: status ?? this.status,
-
+      isCompleted: isCompleted ?? this.isCompleted,
       dueDate: dueDate ?? this.dueDate,
-
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 
-  bool get isCompleted => status?.toLowerCase() == 'completed';
+  bool get completed => isCompleted;
 
-  bool get isPending => status?.toLowerCase() == 'pending';
+  bool get isPending => !isCompleted;
 
   bool get isHighPriority => priority?.toLowerCase() == 'high';
 
   bool get isMediumPriority => priority?.toLowerCase() == 'medium';
 
   bool get isLowPriority => priority?.toLowerCase() == 'low';
-
-  @override
-  String toString() {
-    return '''
-TaskModel(
-  id: $id,
-  title: $title,
-  status: $status,
-  priority: $priority,
-)
-''';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        other is TaskModel &&
-            runtimeType == other.runtimeType &&
-            id == other.id;
-  }
-
-  @override
-  int get hashCode => id.hashCode;
 }
