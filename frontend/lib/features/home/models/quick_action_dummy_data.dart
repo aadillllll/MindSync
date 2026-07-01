@@ -22,8 +22,8 @@ const quickActions = [
   ),
 
   QuickActionModel(
-    title: "Ask AI",
-    icon: Icons.smart_toy_rounded,
-    gradient: [Color(0xffF2994A), Color(0xffF6C453)],
+    title: "My Tasks",
+    icon: Icons.checklist_rounded,
+    gradient: const [Color(0xFF26A69A), Color(0xFF42A5F5)],
   ),
 ];

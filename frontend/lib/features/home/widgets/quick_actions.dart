@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/app_text_styles.dart';
 
 import '../../tasks/screens/create_task_screen.dart';
+import '../../tasks/screens/task_screen.dart';
+
 import '../models/quick_action_dummy_data.dart';
 import 'quick_action_card.dart';
 
@@ -18,6 +20,13 @@ class QuickActions extends StatelessWidget {
         );
         break;
 
+      case "My Tasks":
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const TasksScreen()),
+        );
+        break;
+
       case "Add Note":
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Notes module coming soon")),
@@ -28,12 +37,6 @@ class QuickActions extends StatelessWidget {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Goals module coming soon")),
         );
-        break;
-
-      case "Ask AI":
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text("AI module coming soon")));
         break;
     }
   }
