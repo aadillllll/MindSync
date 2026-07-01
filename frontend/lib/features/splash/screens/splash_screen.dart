@@ -7,6 +7,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../app/main_screen.dart';
 import '../../auth/screens/login_screen.dart';
 import '../../onboarding/screens/onboarding_screen.dart';
+import 'package:provider/provider.dart';
+import '../../profile/providers/profile_provider.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -59,7 +61,13 @@ class _SplashScreenState extends State<SplashScreen>
     } else {
       final user = Supabase.instance.client.auth.currentUser;
 
-      destination = user == null ? const LoginScreen() : const MainScreen();
+      if (user == null) {
+        destination = const LoginScreen();
+      } else {
+        await context.read<ProfileProvider>().loadProfile();
+
+        destination = const MainScreen();
+      }
     }
 
     if (!mounted) return;

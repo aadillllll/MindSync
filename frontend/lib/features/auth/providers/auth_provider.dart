@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../profile/services/profile_service.dart';
 import '../services/auth_service.dart';
 
 class AuthProvider extends ChangeNotifier {
   final AuthService _authService = AuthService();
+  final ProfileService _profileService = ProfileService();
 
   bool _isLoading = false;
 
@@ -17,12 +19,25 @@ class AuthProvider extends ChangeNotifier {
   Future<AuthResponse?> signUp({
     required String email,
     required String password,
+    required String fullName,
   }) async {
     _isLoading = true;
     notifyListeners();
 
     try {
-      return await _authService.signUp(email: email, password: password);
+      final response = await _authService.signUp(
+        email: email,
+        password: password,
+      );
+
+      if (response.user != null) {
+        await _profileService.createProfile(
+          id: response.user!.id,
+          fullName: fullName,
+        );
+      }
+
+      return response;
     } catch (e) {
       debugPrint(e.toString());
       return null;

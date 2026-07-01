@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/profile_provider.dart';
 
 class ProfileSummaryCard extends StatelessWidget {
   const ProfileSummaryCard({super.key});
@@ -27,6 +30,8 @@ class ProfileSummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final profile = context.watch<ProfileProvider>().profile;
+
     return Container(
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
@@ -36,10 +41,10 @@ class ProfileSummaryCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          stat("94%", "Attendance"),
-          stat("87%", "Productivity"),
-          stat("92", "Tasks"),
-          stat("18", "Streak"),
+          stat("--", "Attendance"),
+          stat("${profile?.productivityScore ?? 0}", "Productivity"),
+          stat("0", "Tasks"),
+          stat("0", "Streak"),
         ],
       ),
     );
