@@ -2,11 +2,41 @@ import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_text_styles.dart';
 
+import '../../tasks/screens/create_task_screen.dart';
 import '../models/quick_action_dummy_data.dart';
 import 'quick_action_card.dart';
 
 class QuickActions extends StatelessWidget {
   const QuickActions({super.key});
+
+  void _handleTap(BuildContext context, String title) {
+    switch (title) {
+      case "Add Task":
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const CreateTaskScreen()),
+        );
+        break;
+
+      case "Add Note":
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Notes module coming soon")),
+        );
+        break;
+
+      case "Add Goal":
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Goals module coming soon")),
+        );
+        break;
+
+      case "Ask AI":
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text("AI module coming soon")));
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +60,7 @@ class QuickActions extends StatelessWidget {
                   title: action.title,
                   icon: action.icon,
                   gradient: action.gradient,
-                  onTap: () {},
+                  onTap: () => _handleTap(context, action.title),
                 ),
               )
               .toList(),

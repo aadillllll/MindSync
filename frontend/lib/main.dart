@@ -7,6 +7,7 @@ import 'core/theme/app_theme.dart';
 import 'features/auth/providers/auth_provider.dart';
 import 'features/profile/providers/profile_provider.dart';
 import 'features/splash/screens/splash_screen.dart';
+import 'features/tasks/providers/task_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,6 +31,7 @@ class MindSyncApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider<TaskProvider>(create: (_) => TaskProvider()),
         ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider()),
 
         ChangeNotifierProvider<ProfileProvider>(
