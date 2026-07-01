@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../providers/task_provider.dart';
 import '../widgets/task_card.dart';
 import 'create_task_screen.dart';
+import 'task_details_screen.dart';
 
 class TasksScreen extends StatefulWidget {
   const TasksScreen({super.key});
@@ -105,7 +106,12 @@ class _TasksScreenState extends State<TasksScreen> {
                   return TaskCard(
                     task: task,
                     onTap: () {
-                      // Task Details Screen (Next)
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => TaskDetailsScreen(task: task),
+                        ),
+                      );
                     },
                   );
                 },
