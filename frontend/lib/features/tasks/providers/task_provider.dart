@@ -23,6 +23,19 @@ class TaskProvider extends ChangeNotifier {
 
     try {
       _tasks = await _taskService.getTasks();
+      _tasks.sort((a, b) {
+        // Pending tasks first
+        if (a.completed != b.completed) {
+          return a.completed ? 1 : -1;
+        }
+
+        final priorityOrder = {'high': 0, 'medium': 1, 'low': 2};
+
+        final aPriority = priorityOrder[(a.priority ?? '').toLowerCase()] ?? 3;
+        final bPriority = priorityOrder[(b.priority ?? '').toLowerCase()] ?? 3;
+
+        return aPriority.compareTo(bPriority);
+      });
     } catch (e) {
       debugPrint("TaskProvider Load Error: $e");
     }

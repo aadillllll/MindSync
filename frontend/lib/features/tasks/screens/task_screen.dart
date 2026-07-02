@@ -5,6 +5,7 @@ import '../providers/task_provider.dart';
 import '../widgets/task_card.dart';
 import 'create_task_screen.dart';
 import 'task_details_screen.dart';
+import '../widgets/task_summary_card.dart';
 
 class TasksScreen extends StatefulWidget {
   const TasksScreen({super.key});
@@ -14,6 +15,15 @@ class TasksScreen extends StatefulWidget {
 }
 
 class _TasksScreenState extends State<TasksScreen> {
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  final TextEditingController _searchController = TextEditingController();
+
+  String _searchQuery = "";
   @override
   void initState() {
     super.initState();
@@ -30,6 +40,14 @@ class _TasksScreenState extends State<TasksScreen> {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<TaskProvider>();
+    final filteredTasks = provider.tasks.where((task) {
+      if (_searchQuery.isEmpty) return true;
+
+      final query = _searchQuery.toLowerCase();
+
+      return task.title.toLowerCase().contains(query) ||
+          (task.description ?? "").toLowerCase().contains(query);
+    }).toList();
 
     return Scaffold(
       backgroundColor: const Color(0xFF0B1120),
@@ -97,24 +115,57 @@ class _TasksScreenState extends State<TasksScreen> {
             )
           : RefreshIndicator(
               onRefresh: _refresh,
-              child: ListView.builder(
+              child: ListView(
                 padding: const EdgeInsets.all(20),
-                itemCount: provider.tasks.length,
-                itemBuilder: (context, index) {
-                  final task = provider.tasks[index];
+                children: [
+                  const TaskSummaryCard(),
 
-                  return TaskCard(
-                    task: task,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => TaskDetailsScreen(task: task),
-                        ),
-                      );
+                  const SizedBox(height: 20),
+
+                  TextField(
+                    controller: _searchController,
+                    onChanged: (value) {
+                      setState(() {
+                        _searchQuery = value;
+                      });
                     },
-                  );
-                },
+                    decoration: InputDecoration(
+                      hintText: "Search tasks...",
+                      prefixIcon: const Icon(Icons.search),
+                      filled: true,
+                      fillColor: const Color(0xFF182135),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  const SizedBox(height: 24),
+
+                  ...filteredTasks.map(
+                    (task) => Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: TaskCard(
+                        task: task,
+                        onTap: () async {
+                          final updated = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => TaskDetailsScreen(task: task),
+                            ),
+                          );
+
+                          if (updated == true && mounted) {
+                            await context.read<TaskProvider>().loadTasks();
+                          }
+                        },
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
     );

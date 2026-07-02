@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../models/task_model.dart';
-import 'priority_chip.dart';
-import 'status_chip.dart';
 
 class TaskCard extends StatelessWidget {
   final TaskModel task;
@@ -13,104 +11,131 @@ class TaskCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dueDate = task.dueDate != null
-        ? DateFormat('dd MMM yyyy').format(task.dueDate!)
-        : 'No due date';
+    final isCompleted = (task.status ?? "").toLowerCase() == "completed";
+
+    final isOverdue =
+        !isCompleted &&
+        task.dueDate != null &&
+        task.dueDate!.isBefore(DateTime.now());
+
+    Color priorityColor;
+
+    switch ((task.priority ?? "").toLowerCase()) {
+      case "high":
+        priorityColor = Colors.red;
+        break;
+      case "medium":
+        priorityColor = Colors.orange;
+        break;
+      default:
+        priorityColor = Colors.green;
+    }
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 14),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(20),
-          onTap: onTap,
-          child: Ink(
-            decoration: BoxDecoration(
-              color: const Color(0xFF182135),
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: Colors.white10),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(18),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+      padding: const EdgeInsets.only(bottom: 16),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(22),
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.all(18),
+          decoration: BoxDecoration(
+            color: const Color(0xFF182135),
+            borderRadius: BorderRadius.circular(22),
+            border: Border.all(color: Colors.white10),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
                 children: [
-                  //-------------------------------------------------
-                  // Priority + Status
-                  //-------------------------------------------------
-                  Row(
-                    children: [
-                      PriorityChip(priority: task.priority),
-
-                      const SizedBox(width: 10),
-
-                      StatusChip(status: task.status),
-
-                      const Spacer(),
-
-                      const Icon(
-                        Icons.chevron_right_rounded,
-                        color: Colors.white54,
+                  Expanded(
+                    child: Text(
+                      task.title,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        decoration: isCompleted
+                            ? TextDecoration.lineThrough
+                            : null,
                       ),
-                    ],
+                    ),
                   ),
 
-                  const SizedBox(height: 18),
+                  if (isCompleted)
+                    const Icon(Icons.check_circle, color: Colors.green),
+                ],
+              ),
 
-                  //-------------------------------------------------
-                  // Title
-                  //-------------------------------------------------
-                  Text(
-                    task.title,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
+              if (task.description != null && task.description!.isNotEmpty) ...[
+                const SizedBox(height: 8),
+                Text(
+                  task.description!,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(color: Colors.white70),
+                ),
+              ],
+
+              const SizedBox(height: 16),
+
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  Chip(
+                    backgroundColor: priorityColor.withOpacity(.15),
+                    label: Text(task.priority ?? "Low"),
+                    labelStyle: TextStyle(
+                      color: priorityColor,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
 
-                  if (task.description != null &&
-                      task.description!.isNotEmpty) ...[
-                    const SizedBox(height: 8),
+                  Chip(
+                    backgroundColor: isCompleted
+                        ? Colors.green.withOpacity(.15)
+                        : Colors.orange.withOpacity(.15),
+                    label: Text(task.status ?? "Pending"),
+                    labelStyle: TextStyle(
+                      color: isCompleted ? Colors.green : Colors.orange,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
 
-                    Text(
-                      task.description!,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: Colors.white70,
-                        fontSize: 14,
+                  if (isOverdue)
+                    Chip(
+                      backgroundColor: Colors.red.withOpacity(.15),
+                      label: const Text("Overdue"),
+                      labelStyle: const TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ],
-
-                  const SizedBox(height: 18),
-
-                  //-------------------------------------------------
-                  // Due Date
-                  //-------------------------------------------------
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.calendar_today_rounded,
-                        color: Colors.white54,
-                        size: 16,
-                      ),
-
-                      const SizedBox(width: 6),
-
-                      Text(
-                        dueDate,
-                        style: const TextStyle(
-                          color: Colors.white60,
-                          fontSize: 13,
-                        ),
-                      ),
-                    ],
-                  ),
                 ],
               ),
-            ),
+
+              if (task.dueDate != null) ...[
+                const SizedBox(height: 14),
+
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.calendar_today,
+                      size: 16,
+                      color: Colors.white60,
+                    ),
+
+                    const SizedBox(width: 8),
+
+                    Text(
+                      DateFormat("dd MMM yyyy").format(task.dueDate!),
+                      style: const TextStyle(color: Colors.white60),
+                    ),
+                  ],
+                ),
+              ],
+            ],
           ),
         ),
       ),

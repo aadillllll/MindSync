@@ -20,7 +20,7 @@ class TaskService {
         .eq('user_id', user.id)
         .order('created_at', ascending: false);
 
-    return (response as List).map((task) => TaskModel.fromMap(task)).toList();
+    return (response as List).map((e) => TaskModel.fromMap(e)).toList();
   }
 
   // =========================================================
@@ -30,10 +30,7 @@ class TaskService {
   Future<void> createTask(TaskModel task) async {
     final data = task.toMap();
 
-    // Let PostgreSQL generate the UUID
     data.remove('id');
-
-    // Let PostgreSQL handle timestamps if defaults/triggers exist
     data.remove('created_at');
     data.remove('updated_at');
 
@@ -45,7 +42,17 @@ class TaskService {
   // =========================================================
 
   Future<void> updateTask(TaskModel task) async {
-    await _supabase.from('tasks').update(task.toMap()).eq('id', task.id);
+    await _supabase
+        .from('tasks')
+        .update({
+          'title': task.title,
+          'description': task.description,
+          'priority': task.priority,
+          'status': task.status,
+          'due_date': task.dueDate?.toIso8601String(),
+          'updated_at': DateTime.now().toIso8601String(),
+        })
+        .eq('id', task.id);
   }
 
   // =========================================================
@@ -55,10 +62,9 @@ class TaskService {
   Future<void> deleteTask(String taskId) async {
     await _supabase.from('tasks').delete().eq('id', taskId);
   }
-  //Mark as completed
 
   // =========================================================
-  // Mark Task Completed
+  // Mark Completed
   // =========================================================
 
   Future<void> markTaskCompleted(String taskId) async {
@@ -66,11 +72,11 @@ class TaskService {
         .from('tasks')
         .update({
           'status': 'Completed',
-          'is_completed': true,
           'updated_at': DateTime.now().toIso8601String(),
         })
         .eq('id', taskId);
   }
+
   // =========================================================
   // Get Single Task
   // =========================================================
