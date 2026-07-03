@@ -6,12 +6,16 @@ class EventCard extends StatelessWidget {
   final String location;
   final Color color;
 
+  /// NEW
+  final bool isCompleted;
+
   const EventCard({
     super.key,
     required this.title,
     required this.time,
     required this.location,
     required this.color,
+    this.isCompleted = false,
   });
 
   @override
@@ -43,10 +47,13 @@ class EventCard extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Colors.white,
                     fontSize: 17,
                     fontWeight: FontWeight.bold,
+                    decoration: isCompleted
+                        ? TextDecoration.lineThrough
+                        : TextDecoration.none,
                   ),
                 ),
 
@@ -63,18 +70,18 @@ class EventCard extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              const Icon(
-                Icons.schedule_rounded,
-                color: Colors.white70,
-                size: 18,
+              Icon(
+                isCompleted ? Icons.check_circle : Icons.schedule_rounded,
+                color: isCompleted ? Colors.green : Colors.white70,
+                size: 20,
               ),
 
               const SizedBox(height: 6),
 
               Text(
-                time,
+                isCompleted ? "Completed" : time,
                 style: TextStyle(
-                  color: color,
+                  color: isCompleted ? Colors.green : color,
                   fontWeight: FontWeight.bold,
                   fontSize: 14,
                 ),

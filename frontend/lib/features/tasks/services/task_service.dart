@@ -49,6 +49,7 @@ class TaskService {
           'description': task.description,
           'priority': task.priority,
           'status': task.status,
+          'is_completed': (task.status ?? "").toLowerCase() == "completed",
           'due_date': task.dueDate?.toIso8601String(),
           'updated_at': DateTime.now().toIso8601String(),
         })
@@ -72,6 +73,7 @@ class TaskService {
         .from('tasks')
         .update({
           'status': 'Completed',
+          'is_completed': true,
           'updated_at': DateTime.now().toIso8601String(),
         })
         .eq('id', taskId);

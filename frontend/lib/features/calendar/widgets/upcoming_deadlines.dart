@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/calendar_provider.dart';
+import '../../tasks/screens/task_details_screen.dart';
 
 class UpcomingDeadlines extends StatelessWidget {
   const UpcomingDeadlines({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final provider = context.watch<CalendarProvider>();
+
+    final tasks = provider.upcomingTasks;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -19,30 +28,70 @@ class UpcomingDeadlines extends StatelessWidget {
 
         const SizedBox(height: 18),
 
-        _deadlineCard(
-          title: "AI Assignment",
-          due: "Tomorrow",
-          priority: "High",
-          color: Colors.redAccent,
-        ),
+        if (tasks.isEmpty)
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(22),
+            decoration: BoxDecoration(
+              color: const Color(0xFF182135),
+              borderRadius: BorderRadius.circular(22),
+              border: Border.all(color: Colors.white10),
+            ),
+            child: const Center(
+              child: Text(
+                "No upcoming deadlines 🎉",
+                style: TextStyle(color: Colors.white70, fontSize: 15),
+              ),
+            ),
+          )
+        else
+          ...tasks.map((task) {
+            Color color;
 
-        const SizedBox(height: 14),
+            switch ((task.priority ?? "").toLowerCase()) {
+              case "high":
+                color = Colors.redAccent;
+                break;
+              case "medium":
+                color = Colors.orange;
+                break;
+              default:
+                color = Colors.green;
+            }
 
-        _deadlineCard(
-          title: "Mathematics Quiz",
-          due: "Friday",
-          priority: "Medium",
-          color: Colors.orange,
-        ),
+            final due = task.dueDate != null
+                ? DateFormat("dd MMM").format(task.dueDate!)
+                : "No Date";
 
-        const SizedBox(height: 14),
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 14),
+              child: GestureDetector(
+                onTap: () async {
+                  final updated = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => TaskDetailsScreen(task: task),
+                    ),
+                  );
 
-        _deadlineCard(
-          title: "Mini Project Review",
-          due: "Next Monday",
-          priority: "Low",
-          color: Colors.green,
-        ),
+                  if (!context.mounted) return;
+
+                  if (updated == true) {
+                    await context.read<CalendarProvider>().loadCalendar();
+                    context.read<CalendarProvider>().selectDay(
+                      provider.selectedDay,
+                    );
+                  }
+                },
+                child: _deadlineCard(
+                  title: task.title,
+                  due: due,
+                  priority: task.priority ?? "Low",
+                  color: color,
+                ),
+              ),
+            );
+          }),
       ],
     );
   }

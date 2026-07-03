@@ -6,7 +6,9 @@ import '../models/task_model.dart';
 import '../providers/task_provider.dart';
 
 class CreateTaskScreen extends StatefulWidget {
-  const CreateTaskScreen({super.key});
+  final DateTime? initialDueDate;
+
+  const CreateTaskScreen({super.key, this.initialDueDate});
 
   @override
   State<CreateTaskScreen> createState() => _CreateTaskScreenState();
@@ -24,6 +26,12 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
   DateTime? _dueDate;
 
   @override
+  void initState() {
+    super.initState();
+    _dueDate = widget.initialDueDate;
+  }
+
+  @override
   void dispose() {
     _titleController.dispose();
     _descriptionController.dispose();
@@ -33,7 +41,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
   Future<void> _pickDate() async {
     final date = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: _dueDate ?? DateTime.now(),
       firstDate: DateTime.now(),
       lastDate: DateTime(2100),
     );
@@ -75,7 +83,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
         const SnackBar(content: Text("Task created successfully.")),
       );
 
-      Navigator.pop(context);
+      Navigator.pop(context, true);
     } else {
       ScaffoldMessenger.of(
         context,

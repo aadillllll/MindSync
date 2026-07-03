@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../../tasks/models/task_model.dart';
+
 class MonthCalendar extends StatelessWidget {
   final DateTime focusedDay;
   final DateTime selectedDay;
   final ValueChanged<DateTime> onDaySelected;
+
+  /// All tasks loaded from CalendarProvider
+  final List<TaskModel> tasks;
 
   const MonthCalendar({
     super.key,
     required this.focusedDay,
     required this.selectedDay,
     required this.onDaySelected,
+    required this.tasks,
   });
 
   @override
@@ -27,19 +33,49 @@ class MonthCalendar extends StatelessWidget {
         lastDay: DateTime(2035),
 
         focusedDay: focusedDay,
+
         selectedDayPredicate: (day) => isSameDay(selectedDay, day),
 
         headerVisible: false,
+
+        calendarFormat: CalendarFormat.month,
 
         daysOfWeekHeight: 30,
 
         rowHeight: 48,
 
-        calendarFormat: CalendarFormat.month,
-
         onDaySelected: (selected, focused) {
           onDaySelected(selected);
         },
+
+        // --------------------------------------------------
+        // TASK MARKERS
+        // --------------------------------------------------
+        eventLoader: (day) {
+          return tasks.where((task) {
+            if (task.dueDate == null) return false;
+
+            return isSameDay(task.dueDate!, day);
+          }).toList();
+        },
+
+        calendarBuilders: CalendarBuilders(
+          markerBuilder: (context, day, events) {
+            if (events.isEmpty) return const SizedBox.shrink();
+
+            return Positioned(
+              bottom: 6,
+              child: Container(
+                width: 6,
+                height: 6,
+                decoration: const BoxDecoration(
+                  color: Color(0xFF7C5CFF),
+                  shape: BoxShape.circle,
+                ),
+              ),
+            );
+          },
+        ),
 
         calendarStyle: const CalendarStyle(
           outsideDaysVisible: false,
@@ -69,6 +105,13 @@ class MonthCalendar extends StatelessWidget {
           selectedTextStyle: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
+          ),
+
+          markersMaxCount: 1,
+
+          markerDecoration: BoxDecoration(
+            color: Color(0xFF7C5CFF),
+            shape: BoxShape.circle,
           ),
         ),
 
