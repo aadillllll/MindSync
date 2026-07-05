@@ -16,7 +16,7 @@ const quickActions = [
   ),
 
   QuickActionModel(
-    title: "Add Goal",
+    title: "Goals",
     icon: Icons.track_changes_rounded,
     gradient: [Color(0xff2CB67D), Color(0xff7EE787)],
   ),

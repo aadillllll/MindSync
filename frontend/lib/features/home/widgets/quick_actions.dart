@@ -7,6 +7,7 @@ import '../../tasks/screens/task_screen.dart';
 
 import '../models/quick_action_dummy_data.dart';
 import 'quick_action_card.dart';
+import '../../goals/screens/goals_screen.dart';
 
 class QuickActions extends StatelessWidget {
   const QuickActions({super.key});
@@ -33,9 +34,10 @@ class QuickActions extends StatelessWidget {
         );
         break;
 
-      case "Add Goal":
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Goals module coming soon")),
+      case "Goals":
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const GoalsScreen()),
         );
         break;
     }

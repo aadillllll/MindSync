@@ -9,6 +9,7 @@ import 'features/profile/providers/profile_provider.dart';
 import 'features/splash/screens/splash_screen.dart';
 import 'features/tasks/providers/task_provider.dart';
 import 'features/calendar/providers/calendar_provider.dart';
+import 'features/goals/providers/goal_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,6 +41,7 @@ class MindSyncApp extends StatelessWidget {
         ),
 
         ChangeNotifierProvider(create: (_) => CalendarProvider()),
+        ChangeNotifierProvider<GoalProvider>(create: (_) => GoalProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
