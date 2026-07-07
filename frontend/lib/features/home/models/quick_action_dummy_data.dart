@@ -4,8 +4,8 @@ import 'quick_action_model.dart';
 
 const quickActions = [
   QuickActionModel(
-    title: "Add Task",
-    icon: Icons.add_task_rounded,
+    title: "Habits",
+    icon: Icons.local_fire_department_rounded,
     gradient: [Color(0xff6F49FF), Color(0xff8D63FF)],
   ),
 

@@ -8,16 +8,17 @@ import '../../tasks/screens/task_screen.dart';
 import '../models/quick_action_dummy_data.dart';
 import 'quick_action_card.dart';
 import '../../goals/screens/goals_screen.dart';
+import '../../habits/screens/habits_screen.dart';
 
 class QuickActions extends StatelessWidget {
   const QuickActions({super.key});
 
   void _handleTap(BuildContext context, String title) {
     switch (title) {
-      case "Add Task":
+      case "Habits":
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (_) => const CreateTaskScreen()),
+          MaterialPageRoute(builder: (_) => const HabitsScreen()),
         );
         break;
 
