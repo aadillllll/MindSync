@@ -25,9 +25,9 @@ class ProductivityCard extends StatelessWidget {
         height: 140,
         padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
-          color: backgroundColor.withOpacity(.22),
+          color: backgroundColor.withValues(alpha: .22),
           borderRadius: BorderRadius.circular(22),
-          border: Border.all(color: Colors.white.withOpacity(.05)),
+          border: Border.all(color: Colors.white.withValues(alpha: .05)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

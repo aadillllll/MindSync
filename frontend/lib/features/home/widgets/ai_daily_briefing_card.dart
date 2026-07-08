@@ -31,7 +31,7 @@ class AIDailyBriefingCard extends StatelessWidget {
                 height: 220,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.deepPurple.withOpacity(.22),
+                  color: Colors.deepPurple.withValues(alpha: .22),
                 ),
               ),
             ),
@@ -58,7 +58,7 @@ class AIDailyBriefingCard extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                          color: Colors.deepPurple.withOpacity(.25),
+                          color: Colors.deepPurple.withValues(alpha: .25),
                           borderRadius: BorderRadius.circular(14),
                         ),
                         child: const Icon(
@@ -131,7 +131,7 @@ class AIDailyBriefingCard extends StatelessWidget {
                       vertical: 15,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(.18),
+                      color: Colors.black.withValues(alpha: .18),
                       borderRadius: BorderRadius.circular(18),
                     ),
                     child: Row(
@@ -192,7 +192,6 @@ class _StatItem extends StatelessWidget {
   final Color color;
 
   const _StatItem({
-    super.key,
     required this.icon,
     required this.value,
     required this.label,
@@ -209,7 +208,7 @@ class _StatItem extends StatelessWidget {
             width: 42,
             height: 42,
             decoration: BoxDecoration(
-              color: color.withOpacity(.15),
+              color: color.withValues(alpha: .15),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(icon, color: color, size: 22),

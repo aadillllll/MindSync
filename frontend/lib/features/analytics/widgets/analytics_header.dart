@@ -36,12 +36,9 @@ class AnalyticsHeader extends StatelessWidget {
           child: const Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text("This Week", style: TextStyle(color: Colors.white70)),
+              Text("This Week", style: TextStyle(color: Colors.white70)),
               SizedBox(width: 6),
-              const Icon(
-                Icons.keyboard_arrow_down_rounded,
-                color: Colors.white70,
-              ),
+              Icon(Icons.keyboard_arrow_down_rounded, color: Colors.white70),
             ],
           ),
         ),

@@ -5,12 +5,12 @@ import 'quick_action_model.dart';
 const quickActions = [
   QuickActionModel(
     title: "Habits",
-    icon: Icons.local_fire_department_rounded,
+    icon: Icons.local_fire_department_outlined,
     gradient: [Color(0xff6F49FF), Color(0xff8D63FF)],
   ),
 
   QuickActionModel(
-    title: "Add Note",
+    title: "Notes",
     icon: Icons.description_rounded,
     gradient: [Color(0xff2F80ED), Color(0xff57A4FF)],
   ),
@@ -24,6 +24,6 @@ const quickActions = [
   QuickActionModel(
     title: "My Tasks",
     icon: Icons.checklist_rounded,
-    gradient: const [Color(0xFF26A69A), Color(0xFF42A5F5)],
+    gradient: [Color(0xFF26A69A), Color(0xFF42A5F5)],
   ),
 ];

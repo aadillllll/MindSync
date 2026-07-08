@@ -30,12 +30,12 @@ class TaskModel {
 
   factory TaskModel.fromMap(Map<String, dynamic> map) {
     return TaskModel(
-      id: map['id'] as String,
-      userId: map['user_id'] as String,
-      title: map['title'] as String,
-      description: map['description'] as String?,
-      priority: map['priority'] as String?,
-      status: map['status'] as String?,
+      id: map['id'],
+      userId: map['user_id'],
+      title: map['title'],
+      description: map['description'],
+      priority: map['priority'],
+      status: map['status'],
       isCompleted: map['is_completed'] ?? false,
       dueDate: map['due_date'] != null ? DateTime.parse(map['due_date']) : null,
       createdAt: map['created_at'] != null
@@ -100,25 +100,13 @@ class TaskModel {
     );
   }
 
+  bool get completed => isCompleted;
+
   bool get isPending => !isCompleted;
-  bool get completed => status?.toLowerCase() == "completed";
 
-  bool get isHighPriority => (priority ?? '').toLowerCase() == 'high';
+  bool get isHighPriority => priority?.toLowerCase() == 'high';
 
-  bool get isMediumPriority => (priority ?? '').toLowerCase() == 'medium';
+  bool get isMediumPriority => priority?.toLowerCase() == 'medium';
 
-  bool get isLowPriority => (priority ?? '').toLowerCase() == 'low';
-
-  @override
-  String toString() {
-    return 'TaskModel(id: $id, title: $title, status: $status, priority: $priority)';
-  }
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is TaskModel && runtimeType == other.runtimeType && id == other.id;
-
-  @override
-  int get hashCode => id.hashCode;
+  bool get isLowPriority => priority?.toLowerCase() == 'low';
 }

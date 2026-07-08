@@ -95,7 +95,7 @@ class _Illustration extends StatelessWidget {
               shape: BoxShape.circle,
               gradient: RadialGradient(
                 colors: [
-                  Colors.deepPurple.withOpacity(.35),
+                  Colors.deepPurple.withValues(alpha: .35),
                   Colors.transparent,
                 ],
               ),
@@ -112,7 +112,7 @@ class _Illustration extends StatelessWidget {
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.deepPurple.withOpacity(.45),
+                  color: Colors.deepPurple.withValues(alpha: .45),
                   blurRadius: 30,
                   spreadRadius: 4,
                 ),

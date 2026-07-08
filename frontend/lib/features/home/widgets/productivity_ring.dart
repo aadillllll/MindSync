@@ -24,7 +24,7 @@ class ProductivityRing extends StatelessWidget {
             child: CircularProgressIndicator(
               value: progress,
               strokeWidth: 10,
-              backgroundColor: Colors.white.withOpacity(.08),
+              backgroundColor: Colors.white.withValues(alpha: .08),
               valueColor: const AlwaysStoppedAnimation(Color(0xFF7C5CFF)),
             ),
           ),

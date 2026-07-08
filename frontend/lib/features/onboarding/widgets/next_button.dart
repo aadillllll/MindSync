@@ -25,7 +25,7 @@ class NextButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           padding: EdgeInsets.zero,
           elevation: 8,
-          shadowColor: Colors.deepPurple.withOpacity(.4),
+          shadowColor: Colors.deepPurple.withValues(alpha: .4),
           backgroundColor: Colors.transparent,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),

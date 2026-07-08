@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import '../providers/calendar_provider.dart';
 import 'event_card.dart';
 import '../../tasks/screens/task_details_screen.dart';
-import '../../tasks/models/task_model.dart';
 
 class AgendaSection extends StatelessWidget {
   final DateTime selectedDay;

@@ -22,7 +22,7 @@ class GradientBackground extends StatelessWidget {
           right: -80,
           child: _GlowCircle(
             size: 280,
-            color: AppColors.primary.withOpacity(.35),
+            color: AppColors.primary.withValues(alpha: .35),
           ),
         ),
 
@@ -32,7 +32,7 @@ class GradientBackground extends StatelessWidget {
           left: -80,
           child: _GlowCircle(
             size: 260,
-            color: AppColors.secondary.withOpacity(.25),
+            color: AppColors.secondary.withValues(alpha: .25),
           ),
         ),
 

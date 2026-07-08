@@ -5,7 +5,6 @@ plugins {
 
 android {
     namespace = "com.example.mindsync"
-
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -13,7 +12,7 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
 
-        // Required by flutter_local_notifications and some other plugins
+        // REQUIRED for flutter_local_notifications
         isCoreLibraryDesugaringEnabled = true
     }
 

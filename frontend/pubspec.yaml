@@ -13,11 +13,10 @@ dependencies:
 
   cupertino_icons: ^1.0.8
 
-  provider: ^6.1.5
-
   # ==========================
   # State Management
   # ==========================
+  provider: ^6.1.5
   flutter_riverpod: ^2.6.1
 
   # ==========================
@@ -29,7 +28,6 @@ dependencies:
   # Backend
   # ==========================
   supabase_flutter: ^2.9.1
-
   flutter_dotenv: ^5.1.0
 
   # ==========================
@@ -87,6 +85,11 @@ dependencies:
   uuid: ^4.5.1
   shared_preferences: ^2.5.3
 
+  # ==========================
+  # File Handling
+  # ==========================
+  
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -94,7 +97,6 @@ dev_dependencies:
   flutter_lints: ^6.0.0
 
 flutter:
-
   uses-material-design: true
 
   assets:

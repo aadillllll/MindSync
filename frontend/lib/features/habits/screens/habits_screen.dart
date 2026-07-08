@@ -26,114 +26,140 @@ class _HabitsScreenState extends State<HabitsScreen> {
     });
   }
 
+  Future<void> _refresh() async {
+    await context.read<HabitProvider>().loadHabits();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Habits"), centerTitle: true),
+    return Consumer<HabitProvider>(
+      builder: (context, provider, child) {
+        int bestStreak = 0;
 
-      floatingActionButton: FloatingActionButton.extended(
-        icon: const Icon(Icons.add),
-        label: const Text("Habit"),
-        onPressed: () async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const CreateHabitScreen()),
-          );
-
-          if (!mounted) return;
-
-          context.read<HabitProvider>().loadHabits();
-        },
-      ),
-
-      body: Consumer<HabitProvider>(
-        builder: (context, provider, child) {
-          if (provider.isLoading) {
-            return const Center(child: CircularProgressIndicator());
+        for (final habit in provider.habits) {
+          if (habit.longestStreak > bestStreak) {
+            bestStreak = habit.longestStreak;
           }
+        }
 
-          if (provider.habits.isEmpty) {
-            return EmptyHabits(
-              onAddHabit: () async {
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const CreateHabitScreen()),
-                );
-
-                if (!mounted) return;
-
-                context.read<HabitProvider>().loadHabits();
-              },
-            );
-          }
-
-          int longest = 0;
-
-          for (final habit in provider.habits) {
-            if (habit.longestStreak > longest) {
-              longest = habit.longestStreak;
-            }
-          }
-
-          return RefreshIndicator(
-            onRefresh: provider.loadHabits,
-            child: ListView(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 110),
+        return Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            title: Column(
               children: [
-                const HabitSummaryCard(),
-
-                const SizedBox(height: 20),
-
-                HabitStreakCard(currentStreak: longest, longestStreak: longest),
-
-                const SizedBox(height: 24),
-
-                const Text(
-                  "Today's Habits",
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                ),
-
-                const SizedBox(height: 16),
-
-                ...provider.habits.map(
-                  (habit) => HabitCard(
-                    habit: habit,
-
-                    onTap: () async {
-                      await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => HabitDetailsScreen(habit: habit),
-                        ),
-                      );
-
-                      if (!mounted) return;
-
-                      provider.loadHabits();
-                    },
-
-                    onComplete: () async {
-                      final success = await provider.completeHabit(habit);
-
-                      if (!mounted) return;
-
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            success
-                                ? "${habit.title} completed 🎉"
-                                : "Unable to complete habit",
-                          ),
-                        ),
-                      );
-                    },
-                  ),
+                const Text("Habits"),
+                Text(
+                  "${provider.totalHabits} Habits",
+                  style: Theme.of(context).textTheme.bodySmall,
                 ),
               ],
             ),
-          );
-        },
-      ),
+          ),
+
+          floatingActionButton: FloatingActionButton.extended(
+            icon: const Icon(Icons.add),
+            label: const Text("New Habit"),
+            onPressed: () async {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const CreateHabitScreen()),
+              );
+
+              if (!mounted) return;
+
+              _refresh();
+            },
+          ),
+
+          body: provider.isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : provider.habits.isEmpty
+              ? EmptyHabits(
+                  onAddHabit: () async {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const CreateHabitScreen(),
+                      ),
+                    );
+
+                    if (!mounted) return;
+
+                    _refresh();
+                  },
+                )
+              : RefreshIndicator(
+                  onRefresh: _refresh,
+                  child: ListView(
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 120),
+                    children: [
+                      const HabitSummaryCard(),
+
+                      const SizedBox(height: 20),
+
+                      HabitStreakCard(
+                        currentStreak: bestStreak,
+                        longestStreak: bestStreak,
+                      ),
+
+                      const SizedBox(height: 24),
+
+                      const Text(
+                        "Today's Habits",
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+
+                      const SizedBox(height: 16),
+
+                      ...provider.habits.map(
+                        (habit) => HabitCard(
+                          habit: habit,
+
+                          onTap: () async {
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    HabitDetailsScreen(habit: habit),
+                              ),
+                            );
+
+                            if (!mounted) return;
+
+                            _refresh();
+                          },
+
+                          onComplete: () async {
+                            final success = await provider.completeHabit(habit);
+
+                            if (!mounted) return;
+
+                            if (success) {
+                              _refresh();
+                            }
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  success
+                                      ? "${habit.title} completed 🎉"
+                                      : "Unable to complete habit",
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+
+                      const SizedBox(height: 20),
+                    ],
+                  ),
+                ),
+        );
+      },
     );
   }
 }

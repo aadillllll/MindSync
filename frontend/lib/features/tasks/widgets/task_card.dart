@@ -84,7 +84,7 @@ class TaskCard extends StatelessWidget {
                 runSpacing: 8,
                 children: [
                   Chip(
-                    backgroundColor: priorityColor.withOpacity(.15),
+                    backgroundColor: priorityColor.withValues(alpha: .15),
                     label: Text(task.priority ?? "Low"),
                     labelStyle: TextStyle(
                       color: priorityColor,
@@ -94,8 +94,8 @@ class TaskCard extends StatelessWidget {
 
                   Chip(
                     backgroundColor: isCompleted
-                        ? Colors.green.withOpacity(.15)
-                        : Colors.orange.withOpacity(.15),
+                        ? Colors.green.withValues(alpha: .15)
+                        : Colors.orange.withValues(alpha: .15),
                     label: Text(task.status ?? "Pending"),
                     labelStyle: TextStyle(
                       color: isCompleted ? Colors.green : Colors.orange,
@@ -105,7 +105,7 @@ class TaskCard extends StatelessWidget {
 
                   if (isOverdue)
                     Chip(
-                      backgroundColor: Colors.red.withOpacity(.15),
+                      backgroundColor: Colors.red.withValues(alpha: .15),
                       label: const Text("Overdue"),
                       labelStyle: const TextStyle(
                         color: Colors.red,

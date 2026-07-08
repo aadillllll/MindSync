@@ -132,7 +132,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
               const SizedBox(height: 20),
 
               DropdownButtonFormField<String>(
-                value: _priority,
+                initialValue: _priority,
                 decoration: const InputDecoration(labelText: "Priority"),
                 items: const [
                   DropdownMenuItem(value: "Low", child: Text("Low")),
@@ -149,7 +149,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
               const SizedBox(height: 20),
 
               DropdownButtonFormField<String>(
-                value: _status,
+                initialValue: _status,
                 decoration: const InputDecoration(labelText: "Status"),
                 items: const [
                   DropdownMenuItem(value: "Pending", child: Text("Pending")),

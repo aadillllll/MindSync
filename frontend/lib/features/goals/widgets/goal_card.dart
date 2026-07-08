@@ -75,7 +75,7 @@ class GoalCard extends StatelessWidget {
                     vertical: 6,
                   ),
                   decoration: BoxDecoration(
-                    color: statusColor.withOpacity(.15),
+                    color: statusColor.withValues(alpha: .15),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(

@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_text_styles.dart';
 
-import '../../tasks/screens/create_task_screen.dart';
 import '../../tasks/screens/task_screen.dart';
 
 import '../models/quick_action_dummy_data.dart';
 import 'quick_action_card.dart';
 import '../../goals/screens/goals_screen.dart';
 import '../../habits/screens/habits_screen.dart';
+import '../../notes/screens/notes_screen.dart';
 
 class QuickActions extends StatelessWidget {
   const QuickActions({super.key});
@@ -29,9 +29,10 @@ class QuickActions extends StatelessWidget {
         );
         break;
 
-      case "Add Note":
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Notes module coming soon")),
+      case "Notes":
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const NotesScreen()),
         );
         break;
 

@@ -18,8 +18,8 @@ class _CreateHabitScreenState extends State<CreateHabitScreen> {
 
   final TextEditingController _titleController = TextEditingController();
 
-  String _icon = "check_circle_outline";
-  String _color = "#4CAF50";
+  final String _icon = "check_circle_outline";
+  final String _color = "#4CAF50";
 
   final List<String> _days = [];
 
