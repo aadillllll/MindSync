@@ -13,6 +13,8 @@ dependencies:
 
   cupertino_icons: ^1.0.8
 
+  google_gemini_ai: ^0.0.1+1
+
   # ==========================
   # State Management
   # ==========================
@@ -88,8 +90,9 @@ dependencies:
   # ==========================
   # Ai
   # ==========================
+  
 
-  google_generative_ai: ^0.4.7
+  
   
 
 dev_dependencies:
