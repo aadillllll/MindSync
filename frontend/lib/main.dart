@@ -12,6 +12,7 @@ import 'features/calendar/providers/calendar_provider.dart';
 import 'features/goals/providers/goal_provider.dart';
 import 'features/habits/providers/habit_provider.dart';
 import 'features/notes/providers/note_provider.dart';
+import 'features/ai/providers/ai_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,6 +45,8 @@ class MindSyncApp extends StatelessWidget {
 
         ChangeNotifierProvider(create: (_) => CalendarProvider()),
         ChangeNotifierProvider<GoalProvider>(create: (_) => GoalProvider()),
+
+        ChangeNotifierProvider(create: (_) => AIProvider()),
 
         ChangeNotifierProvider(create: (_) => HabitProvider()),
         ChangeNotifierProvider(create: (_) => NoteProvider()),
