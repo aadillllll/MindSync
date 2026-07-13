@@ -3,17 +3,23 @@ from fastapi import APIRouter, HTTPException
 from app.models.ai_models import ChatRequest, ChatResponse
 from app.services.ai_service import AIService
 
-router = APIRouter(prefix="/ai", tags=["AI"])
+router = APIRouter(
+    prefix="/ai",
+    tags=["AI"],
+)
 
 service = AIService()
 
 
 @router.post("/chat", response_model=ChatResponse)
 def chat(request: ChatRequest):
+
     try:
+
         result = service.generate_response(
-            request.message,
-            request.history,
+            prompt=request.message,
+            user_id=request.user_id,
+            history=request.history,
         )
 
         return ChatResponse(

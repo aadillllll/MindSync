@@ -1,16 +1,16 @@
 from typing import List
-
 from pydantic import BaseModel
 
 
-class ChatMessage(BaseModel):
+class HistoryMessage(BaseModel):
     role: str
     content: str
 
 
 class ChatRequest(BaseModel):
+    user_id: str
     message: str
-    history: List[ChatMessage] = []
+    history: List[HistoryMessage] = []
 
 
 class ChatResponse(BaseModel):
