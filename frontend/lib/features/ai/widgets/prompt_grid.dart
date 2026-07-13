@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../providers/ai_provider.dart';
 import 'quick_prompt_card.dart';
 
 class PromptGrid extends StatelessWidget {
   const PromptGrid({super.key});
+
+  void _sendPrompt(BuildContext context, String prompt) {
+    context.read<AIProvider>().sendMessage(prompt);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,42 +39,49 @@ class PromptGrid extends StatelessWidget {
               icon: Icons.calendar_month_rounded,
               title: "Plan My Day",
               color: Colors.deepPurpleAccent,
-              onTap: () {},
+              onTap: () => _sendPrompt(context, "Plan my day."),
             ),
 
             QuickPromptCard(
               icon: Icons.menu_book_rounded,
               title: "Study Assistant",
               color: Colors.blueAccent,
-              onTap: () {},
+              onTap: () => _sendPrompt(context, "Help me study today."),
             ),
 
             QuickPromptCard(
               icon: Icons.notes_rounded,
               title: "Summarize Notes",
               color: Colors.orange,
-              onTap: () {},
+              onTap: () => _sendPrompt(context, "Summarize all my notes."),
             ),
 
             QuickPromptCard(
               icon: Icons.track_changes_rounded,
               title: "Goal Planner",
               color: Colors.green,
-              onTap: () {},
+              onTap: () => _sendPrompt(
+                context,
+                "Review my goals and suggest the next steps.",
+              ),
             ),
 
             QuickPromptCard(
               icon: Icons.lightbulb_outline_rounded,
               title: "Brainstorm Ideas",
               color: Colors.amber,
-              onTap: () {},
+              onTap: () => _sendPrompt(
+                context,
+                "Give me personalized ideas based on my productivity data.",
+              ),
             ),
 
             QuickPromptCard(
               icon: Icons.school_rounded,
               title: "Explain Concept",
               color: Colors.cyan,
-              onTap: () {},
+              onTap: () =>
+                  _sendPrompt(context, "Help me learn a concept step by step."),
             ),
           ],
         ),

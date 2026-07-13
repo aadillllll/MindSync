@@ -10,8 +10,22 @@ import '../widgets/prompt_grid.dart';
 import '../widgets/recent_chat_section.dart';
 import '../widgets/conversation_drawer.dart';
 
-class AiScreen extends StatelessWidget {
+class AiScreen extends StatefulWidget {
   const AiScreen({super.key});
+
+  @override
+  State<AiScreen> createState() => _AiScreenState();
+}
+
+class _AiScreenState extends State<AiScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<AIProvider>().loadConversations();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

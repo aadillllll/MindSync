@@ -98,6 +98,206 @@ You are the user's personal productivity operating system,
 not just an AI chatbot.
 """
 
+
+
+
+
+
+    @staticmethod
+    def build_prompt(user_prompt: str, context: str) -> str:
+
+        prompt = user_prompt.strip().lower()
+
+        if prompt == "plan my day.":
+
+            instruction = """
+Create a detailed plan for today.
+
+Analyze:
+
+- Tasks
+- Goals
+- Habits
+- Calendar
+- Notes
+
+Requirements:
+
+• Identify overdue work.
+
+• Identify today's work.
+
+• Identify upcoming deadlines.
+
+• Prioritize using:
+1. Urgent
+2. Important
+3. Optional
+
+Generate:
+
+# Today's Priorities
+
+# Recommended Schedule
+
+# Things To Avoid
+
+# Productivity Tips
+
+# Motivation
+"""
+
+        elif prompt == "help me study today.":
+
+            instruction = """
+Create a personalized study plan.
+
+Use:
+
+- Tasks
+- Goals
+- Notes
+- Calendar
+
+Generate:
+
+# Subjects
+
+# Priority
+
+# Study Order
+
+# Time Allocation
+
+# Break Schedule
+
+# Revision Suggestions
+"""
+
+        elif prompt == "summarize all my notes.":
+
+            instruction = """
+Analyze every note.
+
+Create:
+
+# Summary
+
+# Key Points
+
+# Action Items
+
+# Important Things To Remember
+
+Group similar notes together.
+"""
+
+        elif prompt == "review my goals and suggest the next steps.":
+
+            instruction = """
+Review every goal.
+
+Compare with:
+
+- Tasks
+
+- Habits
+
+- Calendar
+
+Generate:
+
+# Goal Progress
+
+# Missing Tasks
+
+# Recommended Next Steps
+
+# Estimated Completion
+
+# Suggestions
+"""
+
+        elif prompt == "give me personalized ideas based on my productivity data.":
+
+            instruction = """
+Generate personalized ideas using:
+
+- Profile
+
+- Goals
+
+- Habits
+
+- Tasks
+
+- Notes
+
+Suggest:
+
+• Project Ideas
+
+• Productivity Improvements
+
+• Study Ideas
+
+• Personal Growth Ideas
+
+• Career Ideas
+"""
+
+        elif prompt == "help me learn a concept step by step.":
+
+            instruction = """
+If the user hasn't specified a topic,
+
+ask:
+
+What would you like to learn?
+
+After they answer,
+
+teach step by step.
+
+Use:
+
+• Examples
+
+• Analogies
+
+• Code (if programming)
+
+• Quiz at the end.
+"""
+
+        else:
+
+            instruction = """
+Answer naturally.
+
+Use every available piece of user context whenever it helps.
+
+Never invent information.
+
+If information is unavailable,
+say so honestly.
+"""
+
+        return f"""
+{instruction}
+
+===============================
+USER CONTEXT
+===============================
+
+{context}
+
+===============================
+USER MESSAGE
+===============================
+
+{user_prompt}
+"""
     @staticmethod
     def get_title_prompt(message: str) -> str:
         return f"""

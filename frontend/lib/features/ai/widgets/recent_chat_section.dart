@@ -1,50 +1,70 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../providers/ai_provider.dart';
 import 'recent_chat_card.dart';
 
 class RecentChatSection extends StatelessWidget {
   const RecentChatSection({super.key});
 
+  String _formatTime(DateTime date) {
+    final difference = DateTime.now().difference(date);
+
+    if (difference.inMinutes < 1) {
+      return "Now";
+    }
+
+    if (difference.inMinutes < 60) {
+      return "${difference.inMinutes} min";
+    }
+
+    if (difference.inHours < 24) {
+      return "${difference.inHours} hr";
+    }
+
+    if (difference.inDays == 1) {
+      return "Yesterday";
+    }
+
+    return "${difference.inDays} days";
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          "Recent Conversations",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+    return Consumer<AIProvider>(
+      builder: (_, provider, __) {
+        if (provider.conversations.isEmpty) {
+          return const SizedBox();
+        }
 
-        const SizedBox(height: 18),
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              "Recent Conversations",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
 
-        RecentChatCard(
-          title: "Study Timetable",
-          subtitle: "Created a weekly study schedule for your exams.",
-          time: "10 min",
-          icon: Icons.calendar_month_rounded,
-          color: Colors.deepPurpleAccent,
-        ),
+            const SizedBox(height: 18),
 
-        RecentChatCard(
-          title: "Summarize Notes",
-          subtitle: "Summarized your Operating Systems notes.",
-          time: "Yesterday",
-          icon: Icons.notes_rounded,
-          color: Colors.orange,
-        ),
-
-        RecentChatCard(
-          title: "Assignment Planner",
-          subtitle: "Generated a deadline-based work plan.",
-          time: "2 days",
-          icon: Icons.assignment_rounded,
-          color: Colors.green,
-        ),
-      ],
+            ...provider.conversations
+                .take(5)
+                .map(
+                  (conversation) => RecentChatCard(
+                    title: conversation.title,
+                    time: _formatTime(conversation.updatedAt),
+                    onTap: () async {
+                      await provider.openConversation(conversation);
+                    },
+                  ),
+                ),
+          ],
+        );
+      },
     );
   }
 }
