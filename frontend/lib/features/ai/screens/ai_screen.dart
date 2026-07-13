@@ -8,6 +8,7 @@ import '../widgets/chat_input_bar.dart';
 import '../widgets/message_bubble.dart';
 import '../widgets/prompt_grid.dart';
 import '../widgets/recent_chat_section.dart';
+import '../widgets/conversation_drawer.dart';
 
 class AiScreen extends StatelessWidget {
   const AiScreen({super.key});
@@ -19,6 +20,7 @@ class AiScreen extends StatelessWidget {
         final hasMessages = provider.messages.isNotEmpty;
 
         return Scaffold(
+          drawer: const ConversationDrawer(),
           backgroundColor: const Color(0xFF0B1120),
 
           body: SafeArea(

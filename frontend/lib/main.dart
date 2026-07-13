@@ -47,6 +47,7 @@ class MindSyncApp extends StatelessWidget {
         ChangeNotifierProvider<GoalProvider>(create: (_) => GoalProvider()),
 
         ChangeNotifierProvider(create: (_) => AIProvider()),
+        ChangeNotifierProvider(create: (_) => AIProvider()),
 
         ChangeNotifierProvider(create: (_) => HabitProvider()),
         ChangeNotifierProvider(create: (_) => NoteProvider()),

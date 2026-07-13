@@ -1,38 +1,29 @@
-import 'package:flutter/foundation.dart';
+import 'dart:convert';
 
-import '../models/ai_message.dart';
-import 'gemini_service.dart';
-import 'prompt_builder.dart';
+import 'package:http/http.dart' as http;
+
+import '../models/chat_message.dart';
 
 class AIService {
-  final GeminiService _gemini = GeminiService();
+  static const String baseUrl = "http://10.0.2.2:8000";
 
-  Future<AIMessage> sendMessage({
-    required String conversationId,
-    required String userPrompt,
-    String? tasks,
-    String? notes,
-    String? calendar,
-    String? goals,
-  }) async {
-    final prompt = PromptBuilder.build(
-      userPrompt: userPrompt,
-      tasks: tasks,
-      notes: notes,
-      calendar: calendar,
-      goals: goals,
+  Future<Map<String, dynamic>> sendMessage(
+    String message,
+    List<ChatMessage> history,
+  ) async {
+    final response = await http.post(
+      Uri.parse("$baseUrl/ai/chat"),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({
+        "message": message,
+        "history": history.map((e) => e.toJson()).toList(),
+      }),
     );
 
-    final response = await _gemini.generateResponse(prompt);
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    }
 
-    debugPrint(prompt);
-
-    return AIMessage(
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
-      conversationId: conversationId,
-      role: MessageRole.assistant,
-      content: response,
-      createdAt: DateTime.now(),
-    );
+    throw Exception(response.body);
   }
 }

@@ -7,6 +7,16 @@ class AIHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
+        // Drawer Button
+        IconButton(
+          onPressed: () {
+            Scaffold.of(context).openDrawer();
+          },
+          icon: const Icon(Icons.menu_rounded, color: Colors.white, size: 28),
+        ),
+
+        const SizedBox(width: 10),
+
         const Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
