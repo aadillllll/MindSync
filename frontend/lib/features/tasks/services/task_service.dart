@@ -33,6 +33,14 @@ class TaskService {
     data.remove('id');
     data.remove('created_at');
     data.remove('updated_at');
+    data.remove('completed_at');
+
+    final isCompleted = (task.status ?? "").toLowerCase() == "completed";
+
+    data['is_completed'] = isCompleted;
+    data['completed_at'] = isCompleted
+        ? DateTime.now().toUtc().toIso8601String()
+        : null;
 
     await _supabase.from('tasks').insert(data);
   }
@@ -42,6 +50,8 @@ class TaskService {
   // =========================================================
 
   Future<void> updateTask(TaskModel task) async {
+    final isCompleted = (task.status ?? "").toLowerCase() == "completed";
+
     await _supabase
         .from('tasks')
         .update({
@@ -49,9 +59,12 @@ class TaskService {
           'description': task.description,
           'priority': task.priority,
           'status': task.status,
-          'is_completed': (task.status ?? "").toLowerCase() == "completed",
+          'is_completed': isCompleted,
+          'completed_at': isCompleted
+              ? DateTime.now().toUtc().toIso8601String()
+              : null,
           'due_date': task.dueDate?.toIso8601String(),
-          'updated_at': DateTime.now().toIso8601String(),
+          'updated_at': DateTime.now().toUtc().toIso8601String(),
         })
         .eq('id', task.id);
   }
@@ -74,7 +87,24 @@ class TaskService {
         .update({
           'status': 'Completed',
           'is_completed': true,
-          'updated_at': DateTime.now().toIso8601String(),
+          'completed_at': DateTime.now().toUtc().toIso8601String(),
+          'updated_at': DateTime.now().toUtc().toIso8601String(),
+        })
+        .eq('id', taskId);
+  }
+
+  // =========================================================
+  // Mark Incomplete (NEW)
+  // =========================================================
+
+  Future<void> markTaskIncomplete(String taskId) async {
+    await _supabase
+        .from('tasks')
+        .update({
+          'status': 'Pending',
+          'is_completed': false,
+          'completed_at': null,
+          'updated_at': DateTime.now().toUtc().toIso8601String(),
         })
         .eq('id', taskId);
   }

@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 
 class WeeklyStatsRow extends StatelessWidget {
-  const WeeklyStatsRow({super.key});
+  final int goals;
+  final double focusHours;
+
+  const WeeklyStatsRow({
+    super.key,
+    required this.goals,
+    required this.focusHours,
+  });
 
   Widget _buildStat({
     required IconData icon,
@@ -50,7 +57,7 @@ class WeeklyStatsRow extends StatelessWidget {
         _buildStat(
           icon: Icons.flag_rounded,
           color: Colors.deepPurpleAccent,
-          value: "6",
+          value: goals.toString(),
           title: "Goals",
         ),
 
@@ -59,7 +66,7 @@ class WeeklyStatsRow extends StatelessWidget {
         _buildStat(
           icon: Icons.schedule_rounded,
           color: Colors.blueAccent,
-          value: "26h",
+          value: "${focusHours.toStringAsFixed(1)}h",
           title: "Focus Time",
         ),
       ],

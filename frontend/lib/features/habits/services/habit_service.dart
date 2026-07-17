@@ -96,6 +96,19 @@ class HabitService {
     await _supabase.from('habits').delete().eq('id', id);
   }
 
+  Future<List<Map<String, dynamic>>> getHabitLogs() async {
+    final user = _supabase.auth.currentUser;
+
+    if (user == null) return [];
+
+    final response = await _supabase
+        .from('habit_logs')
+        .select()
+        .eq('user_id', user.id);
+
+    return List<Map<String, dynamic>>.from(response);
+  }
+
   // ==========================================================
   // Complete Habit For Today
   // ==========================================================

@@ -5,6 +5,7 @@ class AchievementTile extends StatelessWidget {
   final Color color;
   final String title;
   final String subtitle;
+  final bool unlocked;
 
   const AchievementTile({
     super.key,
@@ -12,28 +13,40 @@ class AchievementTile extends StatelessWidget {
     required this.color,
     required this.title,
     required this.subtitle,
+    required this.unlocked,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
       margin: const EdgeInsets.only(bottom: 14),
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         color: const Color(0xFF182135),
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(
+          color: unlocked
+              ? Colors.amber.withValues(alpha: .35)
+              : Colors.white10,
+        ),
       ),
       child: Row(
         children: [
           Container(
-            width: 54,
-            height: 54,
+            width: 56,
+            height: 56,
             decoration: BoxDecoration(
-              color: color.withValues(alpha: .15),
+              color: unlocked
+                  ? Colors.amber.withValues(alpha: .18)
+                  : Colors.white.withValues(alpha: .06),
               borderRadius: BorderRadius.circular(16),
             ),
-            child: Icon(icon, color: color),
+            child: Icon(
+              unlocked ? icon : Icons.lock_outline_rounded,
+              color: unlocked ? Colors.amber : Colors.white38,
+              size: 28,
+            ),
           ),
 
           const SizedBox(width: 16),
@@ -44,8 +57,8 @@ class AchievementTile extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
-                    color: Colors.white,
+                  style: TextStyle(
+                    color: unlocked ? Colors.white : Colors.white70,
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                   ),
@@ -55,8 +68,8 @@ class AchievementTile extends StatelessWidget {
 
                 Text(
                   subtitle,
-                  style: const TextStyle(
-                    color: Colors.white60,
+                  style: TextStyle(
+                    color: unlocked ? Colors.white70 : Colors.white38,
                     fontSize: 13,
                     height: 1.4,
                   ),
@@ -65,7 +78,35 @@ class AchievementTile extends StatelessWidget {
             ),
           ),
 
-          const Icon(Icons.chevron_right_rounded, color: Colors.white38),
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            child: unlocked
+                ? Container(
+                    key: const ValueKey("achieved"),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.green.withValues(alpha: .18),
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    child: const Text(
+                      "ACHIEVED",
+                      style: TextStyle(
+                        color: Colors.greenAccent,
+                        fontSize: 11,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: .8,
+                      ),
+                    ),
+                  )
+                : const Icon(
+                    Icons.lock_rounded,
+                    key: ValueKey("locked"),
+                    color: Colors.white30,
+                  ),
+          ),
         ],
       ),
     );

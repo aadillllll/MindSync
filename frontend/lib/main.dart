@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
 import 'core/theme/app_theme.dart';
 import 'features/auth/providers/auth_provider.dart';
 import 'features/profile/providers/profile_provider.dart';
@@ -13,6 +12,7 @@ import 'features/goals/providers/goal_provider.dart';
 import 'features/habits/providers/habit_provider.dart';
 import 'features/notes/providers/note_provider.dart';
 import 'features/ai/providers/ai_provider.dart';
+import 'features/analytics/providers/analytics_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -46,7 +46,8 @@ class MindSyncApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => CalendarProvider()),
         ChangeNotifierProvider<GoalProvider>(create: (_) => GoalProvider()),
 
-        ChangeNotifierProvider(create: (_) => AIProvider()),
+        ChangeNotifierProvider(create: (_) => AnalyticsProvider()),
+
         ChangeNotifierProvider(create: (_) => AIProvider()),
 
         ChangeNotifierProvider(create: (_) => HabitProvider()),

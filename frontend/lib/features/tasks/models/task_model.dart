@@ -14,6 +14,7 @@ class TaskModel {
 
   final DateTime? createdAt;
   final DateTime? updatedAt;
+  final DateTime? completedAt;
 
   const TaskModel({
     required this.id,
@@ -26,6 +27,7 @@ class TaskModel {
     this.dueDate,
     this.createdAt,
     this.updatedAt,
+    this.completedAt,
   });
 
   factory TaskModel.fromMap(Map<String, dynamic> map) {
@@ -44,6 +46,9 @@ class TaskModel {
       updatedAt: map['updated_at'] != null
           ? DateTime.parse(map['updated_at'])
           : null,
+      completedAt: map['completed_at'] != null
+          ? DateTime.parse(map['completed_at'])
+          : null,
     );
   }
 
@@ -59,6 +64,7 @@ class TaskModel {
       'due_date': dueDate?.toIso8601String(),
       'created_at': createdAt?.toIso8601String(),
       'updated_at': updatedAt?.toIso8601String(),
+      'completed_at': completedAt?.toIso8601String(),
     };
   }
 
@@ -71,6 +77,7 @@ class TaskModel {
       'status': status,
       'is_completed': isCompleted,
       'due_date': dueDate?.toIso8601String(),
+      'completed_at': completedAt?.toIso8601String(),
     };
   }
 
@@ -85,6 +92,7 @@ class TaskModel {
     DateTime? dueDate,
     DateTime? createdAt,
     DateTime? updatedAt,
+    DateTime? completedAt,
   }) {
     return TaskModel(
       id: id ?? this.id,
@@ -97,6 +105,7 @@ class TaskModel {
       dueDate: dueDate ?? this.dueDate,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      completedAt: completedAt ?? this.completedAt,
     );
   }
 

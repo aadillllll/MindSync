@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class AIInsightCard extends StatelessWidget {
-  const AIInsightCard({super.key});
+  final String insight;
+
+  const AIInsightCard({super.key, required this.insight});
 
   @override
   Widget build(BuildContext context) {
@@ -16,10 +18,10 @@ class AIInsightCard extends StatelessWidget {
           colors: [Color(0xFF7C5CFF), Color(0xFF5D7CFF)],
         ),
       ),
-      child: const Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
+          const Row(
             children: [
               Icon(Icons.auto_awesome_rounded, color: Colors.white),
               SizedBox(width: 10),
@@ -34,13 +36,15 @@ class AIInsightCard extends StatelessWidget {
             ],
           ),
 
-          SizedBox(height: 18),
+          const SizedBox(height: 18),
 
           Text(
-            "Your productivity is highest between 7:00 PM and 9:00 PM.\n\n"
-            "Try scheduling your most difficult study sessions during this period. "
-            "You've also maintained an 18-day habit streak—keep it going!",
-            style: TextStyle(color: Colors.white, fontSize: 15, height: 1.6),
+            insight,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 15,
+              height: 1.6,
+            ),
           ),
         ],
       ),

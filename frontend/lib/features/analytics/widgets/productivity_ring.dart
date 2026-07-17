@@ -1,18 +1,28 @@
 import 'package:flutter/material.dart';
 
-import 'progress_ring.dart';
-import 'productivity_info.dart';
-import 'weekly_stats_row.dart';
 import 'insight_card.dart';
+import 'productivity_info.dart';
+import 'progress_ring.dart';
+import 'weekly_stats_row.dart';
 
 class ProductivityRing extends StatelessWidget {
   final double progress;
   final int percentage;
 
+  final int goals;
+  final double focusHours;
+
+  final String message;
+  final String insight;
+
   const ProductivityRing({
     super.key,
     required this.progress,
     required this.percentage,
+    required this.goals,
+    required this.focusHours,
+    required this.message,
+    required this.insight,
   });
 
   @override
@@ -35,7 +45,7 @@ class ProductivityRing extends StatelessWidget {
 
           const SizedBox(height: 24),
 
-          const ProductivityInfo(),
+          ProductivityInfo(percentage: percentage, message: message),
 
           const SizedBox(height: 24),
 
@@ -43,11 +53,11 @@ class ProductivityRing extends StatelessWidget {
 
           const SizedBox(height: 20),
 
-          const WeeklyStatsRow(),
+          WeeklyStatsRow(goals: goals, focusHours: focusHours),
 
           const SizedBox(height: 20),
 
-          const InsightCard(),
+          InsightCard(insight: insight),
         ],
       ),
     );

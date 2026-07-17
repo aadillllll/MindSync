@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/analytics_provider.dart';
 
 import '../widgets/achievement_tile.dart';
 import '../widgets/ai_insight_card.dart';
@@ -8,151 +11,230 @@ import '../widgets/performance_tile.dart';
 import '../widgets/productivity_ring.dart';
 import '../widgets/weekly_chart.dart';
 
-class AnalyticsScreen extends StatelessWidget {
+class AnalyticsScreen extends StatefulWidget {
   const AnalyticsScreen({super.key});
 
   @override
+  State<AnalyticsScreen> createState() => _AnalyticsScreenState();
+}
+
+class _AnalyticsScreenState extends State<AnalyticsScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    Future.microtask(() {
+      context.read<AnalyticsProvider>().loadAnalytics();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    IconData _goalIcon(String icon) {
+      switch (icon.toLowerCase()) {
+        case "school":
+          return Icons.school_rounded;
+
+        case "fitness":
+          return Icons.fitness_center_rounded;
+
+        case "book":
+          return Icons.menu_book_rounded;
+
+        case "flag":
+          return Icons.flag_rounded;
+
+        default:
+          return Icons.flag_rounded;
+      }
+    }
+
+    Color _goalColor(double progress) {
+      if (progress >= 0.80) {
+        return Colors.green;
+      }
+
+      if (progress >= 0.50) {
+        return Colors.orange;
+      }
+
+      return Colors.redAccent;
+    }
+
+    IconData _achievementIcon(String icon) {
+      switch (icon.toLowerCase()) {
+        case "task":
+          return Icons.task_alt_rounded;
+
+        case "emoji_events":
+          return Icons.emoji_events_rounded;
+
+        case "local_fire_department":
+          return Icons.local_fire_department_rounded;
+
+        case "workspace_premium":
+          return Icons.workspace_premium_rounded;
+
+        default:
+          return Icons.emoji_events_rounded;
+      }
+    }
+
+    final provider = context.watch<AnalyticsProvider>();
+
+    if (provider.isLoading) {
+      return const Scaffold(
+        backgroundColor: Color(0xFF0B1120),
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    if (provider.error != null) {
+      return Scaffold(
+        backgroundColor: const Color(0xFF0B1120),
+        body: Center(
+          child: Text(
+            provider.error!,
+            style: const TextStyle(color: Colors.white),
+          ),
+        ),
+      );
+    }
+
+    final analytics = provider.analytics!;
+
     return Scaffold(
       backgroundColor: const Color(0xFF0B1120),
-
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const AnalyticsHeader(),
+        child: RefreshIndicator(
+          color: Colors.deepPurpleAccent,
+          backgroundColor: const Color(0xFF1E293B),
+          onRefresh: () async {
+            await context.read<AnalyticsProvider>().refresh();
+          },
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const AnalyticsHeader(),
 
-              const SizedBox(height: 28),
+                const SizedBox(height: 28),
 
-              const ProductivityRing(progress: .87, percentage: 87),
-
-              const SizedBox(height: 30),
-
-              const WeeklyChart(),
-
-              const SizedBox(height: 30),
-
-              const Text(
-                "Performance",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
+                ProductivityRing(
+                  progress: analytics.productivityScore / 100,
+                  percentage: analytics.productivityScore.round(),
+                  goals: analytics.goals.length,
+                  focusHours: analytics.focusHours.toDouble(),
+                  message: analytics.productivityScore >= 80
+                      ? "Excellent! You're performing really well this week."
+                      : analytics.productivityScore >= 60
+                      ? "Good progress. Keep your momentum going!"
+                      : "Let's improve your productivity today.",
+                  insight: analytics.aiInsight,
                 ),
-              ),
 
-              const SizedBox(height: 18),
+                const SizedBox(height: 30),
 
-              const PerformanceTile(
-                icon: Icons.task_alt_rounded,
-                color: Colors.deepPurpleAccent,
-                title: "Tasks Completed",
-                value: "92",
-                subtitle: "+18% from last week",
-              ),
+                WeeklyChart(activity: analytics.weeklyActivity),
 
-              const PerformanceTile(
-                icon: Icons.timer_outlined,
-                color: Colors.green,
-                title: "Focus Hours",
-                value: "14.5",
-                subtitle: "Hours this week",
-              ),
+                const SizedBox(height: 30),
 
-              const PerformanceTile(
-                icon: Icons.menu_book_rounded,
-                color: Colors.orange,
-                title: "Study Hours",
-                value: "26",
-                subtitle: "Hours completed",
-              ),
-
-              const PerformanceTile(
-                icon: Icons.local_fire_department_rounded,
-                color: Colors.redAccent,
-                title: "Habit Streak",
-                value: "18",
-                subtitle: "Consecutive days",
-              ),
-
-              const SizedBox(height: 30),
-
-              const Text(
-                "Goals",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
+                const Text(
+                  "Performance",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
 
-              const SizedBox(height: 18),
+                const SizedBox(height: 18),
 
-              const GoalTile(
-                icon: Icons.school_rounded,
-                color: Colors.deepPurpleAccent,
-                title: "Semester Goal",
-                progress: .82,
-                percentage: "82%",
-              ),
-
-              const GoalTile(
-                icon: Icons.fitness_center_rounded,
-                color: Colors.green,
-                title: "Fitness Goal",
-                progress: .64,
-                percentage: "64%",
-              ),
-
-              const GoalTile(
-                icon: Icons.menu_book_rounded,
-                color: Colors.orange,
-                title: "Reading Goal",
-                progress: .48,
-                percentage: "48%",
-              ),
-
-              const SizedBox(height: 30),
-
-              const AIInsightCard(),
-
-              const SizedBox(height: 30),
-
-              const Text(
-                "Achievements",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
+                PerformanceTile(
+                  icon: Icons.task_alt_rounded,
+                  color: Colors.deepPurpleAccent,
+                  title: "Tasks Completed",
+                  value: analytics.completedTasks.toString(),
+                  subtitle: "from last week",
                 ),
-              ),
 
-              const SizedBox(height: 18),
+                PerformanceTile(
+                  icon: Icons.timer_outlined,
+                  color: Colors.green,
+                  title: "Focus Hours",
+                  value: analytics.focusHours.toString(),
+                  subtitle: "coming soon",
+                ),
 
-              const AchievementTile(
-                icon: Icons.local_fire_department_rounded,
-                color: Colors.orange,
-                title: "18-Day Habit Streak",
-                subtitle:
-                    "You've maintained your habits for 18 consecutive days.",
-              ),
+                PerformanceTile(
+                  icon: Icons.menu_book_rounded,
+                  color: Colors.orange,
+                  title: "Study Hours",
+                  value: analytics.studyHours.toString(),
+                  subtitle: "coming soon",
+                ),
 
-              const AchievementTile(
-                icon: Icons.workspace_premium_rounded,
-                color: Colors.amber,
-                title: "Productivity Master",
-                subtitle: "Achieved an 87% productivity score this week.",
-              ),
+                PerformanceTile(
+                  icon: Icons.local_fire_department_rounded,
+                  color: Colors.redAccent,
+                  title: "Habit Streak",
+                  value: analytics.habitStreak.toString(),
+                  subtitle: "Consecutive days",
+                ),
 
-              const AchievementTile(
-                icon: Icons.emoji_events_rounded,
-                color: Colors.green,
-                title: "Task Champion",
-                subtitle: "Completed more than 90 tasks this week.",
-              ),
-            ],
+                const SizedBox(height: 30),
+
+                const Text(
+                  "Goals",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+
+                const SizedBox(height: 18),
+
+                ...analytics.goals.map(
+                  (goal) => GoalTile(
+                    icon: _goalIcon(goal.icon),
+                    color: _goalColor(goal.progress),
+                    title: goal.title,
+                    progress: goal.progress,
+                    percentage: "${(goal.progress * 100).round()}%",
+                  ),
+                ),
+
+                const SizedBox(height: 30),
+
+                AIInsightCard(insight: analytics.aiInsight),
+
+                const SizedBox(height: 30),
+
+                const Text(
+                  "Achievements",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+
+                const SizedBox(height: 18),
+
+                ...analytics.achievements.map(
+                  (achievement) => AchievementTile(
+                    icon: _achievementIcon(achievement.icon),
+                    color: Colors.amber,
+                    title: achievement.title,
+                    subtitle: achievement.description,
+                    unlocked: achievement.unlocked,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

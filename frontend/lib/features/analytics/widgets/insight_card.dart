@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class InsightCard extends StatelessWidget {
-  const InsightCard({super.key});
+  final String insight;
+
+  const InsightCard({super.key, required this.insight});
 
   @override
   Widget build(BuildContext context) {
@@ -11,16 +13,24 @@ class InsightCard extends StatelessWidget {
         color: const Color(0xFF7C5CFF).withValues(alpha: .12),
         borderRadius: BorderRadius.circular(24),
       ),
-      child: const Row(
+      child: Row(
         children: [
-          Icon(Icons.auto_awesome_rounded, color: Color(0xFF7C5CFF), size: 30),
+          const Icon(
+            Icons.auto_awesome_rounded,
+            color: Color(0xFF7C5CFF),
+            size: 30,
+          ),
 
-          SizedBox(width: 18),
+          const SizedBox(width: 18),
 
           Expanded(
             child: Text(
-              "Excellent! You're more productive than 89% of your previous weeks.",
-              style: TextStyle(color: Colors.white, fontSize: 16, height: 1.5),
+              insight,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                height: 1.5,
+              ),
             ),
           ),
         ],

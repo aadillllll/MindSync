@@ -1,19 +1,26 @@
 import 'package:flutter/material.dart';
 
+import '../models/weekly_activity_model.dart';
+
 class WeeklyChart extends StatelessWidget {
-  const WeeklyChart({super.key});
+  final List<WeeklyActivityModel> activity;
+
+  const WeeklyChart({super.key, required this.activity});
 
   @override
   Widget build(BuildContext context) {
-    final data = [
-      ("Mon", 0.70),
-      ("Tue", 0.90),
-      ("Wed", 0.55),
-      ("Thu", 0.80),
-      ("Fri", 1.00),
-      ("Sat", 0.60),
-      ("Sun", 0.85),
-    ];
+    double maxValue = 1;
+
+    if (activity.isNotEmpty) {
+      maxValue = activity
+          .map((e) => e.total)
+          .reduce((a, b) => a > b ? a : b)
+          .toDouble();
+
+      if (maxValue == 0) {
+        maxValue = 1;
+      }
+    }
 
     return Container(
       width: double.infinity,
@@ -40,18 +47,21 @@ class WeeklyChart extends StatelessWidget {
           SizedBox(
             height: 180,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.end,
-              children: data.map((day) {
+              children: activity.map((day) {
+                final height = ((day.total / maxValue) * 120).clamp(
+                  20.0,
+                  140.0,
+                );
+
                 return Expanded(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       AnimatedContainer(
-                        duration: const Duration(milliseconds: 600),
-                        curve: Curves.easeOut,
+                        duration: const Duration(milliseconds: 500),
                         width: 22,
-                        height: 120 * day.$2 + 20,
+                        height: height,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
                           gradient: const LinearGradient(
@@ -65,7 +75,7 @@ class WeeklyChart extends StatelessWidget {
                       const SizedBox(height: 10),
 
                       Text(
-                        day.$1,
+                        day.day,
                         style: const TextStyle(
                           color: Colors.white70,
                           fontSize: 12,

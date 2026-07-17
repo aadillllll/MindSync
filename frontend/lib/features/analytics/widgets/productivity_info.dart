@@ -1,14 +1,23 @@
 import 'package:flutter/material.dart';
 
 class ProductivityInfo extends StatelessWidget {
-  const ProductivityInfo({super.key});
+  final int percentage;
+  final String message;
+
+  const ProductivityInfo({
+    super.key,
+    required this.percentage,
+    required this.message,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    final bool positive = percentage >= 70;
+
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        const Text(
           "Productivity Score",
           style: TextStyle(
             color: Colors.white,
@@ -17,39 +26,41 @@ class ProductivityInfo extends StatelessWidget {
           ),
         ),
 
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
 
         Text(
-          "This week you're performing great!",
-          style: TextStyle(color: Colors.white70, fontSize: 16),
+          message,
+          style: const TextStyle(color: Colors.white70, fontSize: 16),
         ),
 
-        SizedBox(height: 30),
+        const SizedBox(height: 30),
 
         Row(
           children: [
             Icon(
-              Icons.trending_up_rounded,
-              color: Colors.greenAccent,
+              positive
+                  ? Icons.trending_up_rounded
+                  : Icons.trending_down_rounded,
+              color: positive ? Colors.greenAccent : Colors.orangeAccent,
               size: 36,
             ),
 
-            SizedBox(width: 14),
+            const SizedBox(width: 14),
 
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "+12%",
+                  "$percentage%",
                   style: TextStyle(
-                    color: Colors.greenAccent,
+                    color: positive ? Colors.greenAccent : Colors.orangeAccent,
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
 
-                Text(
-                  "vs last week",
+                const Text(
+                  "Current productivity",
                   style: TextStyle(color: Colors.white60, fontSize: 15),
                 ),
               ],
