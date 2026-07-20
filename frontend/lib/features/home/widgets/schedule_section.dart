@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/widgets/glass_card.dart';
 
-import '../models/schedule_dummy_data.dart';
+import '../../calendar/screens/event_details_screen.dart';
+import '../providers/dashboard_provider.dart';
 import 'schedule_card.dart';
 
 class ScheduleSection extends StatelessWidget {
@@ -11,6 +13,9 @@ class ScheduleSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dashboardProvider = context.watch<DashboardProvider>();
+    final events = dashboardProvider.dashboard?.todayEvents ?? [];
+
     return GlassCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -24,26 +29,51 @@ class ScheduleSection extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-
               const Spacer(),
-
-              TextButton(onPressed: () {}, child: const Text("View all")),
+              TextButton(
+                onPressed: () {
+                  // TODO: Navigate to Calendar Screen
+                },
+                child: const Text("View all"),
+              ),
             ],
           ),
 
           const SizedBox(height: 20),
 
-          ...List.generate(schedules.length, (index) {
-            final item = schedules[index];
+          if (events.isEmpty)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: Center(
+                child: Text(
+                  "No events scheduled for today.",
+                  style: AppTextStyles.bodySecondary,
+                ),
+              ),
+            )
+          else
+            ...List.generate(events.length, (index) {
+              final event = events[index];
 
-            return ScheduleCard(
-              time: item.time,
-              title: item.title,
-              subtitle: item.subtitle,
-              color: Color(item.color),
-              isLast: index == schedules.length - 1,
-            );
-          }),
+              return InkWell(
+                borderRadius: BorderRadius.circular(16),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => EventDetailsScreen(event: event),
+                    ),
+                  );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 4),
+                  child: ScheduleCard(
+                    event: event,
+                    isLast: index == events.length - 1,
+                  ),
+                ),
+              );
+            }),
         ],
       ),
     );

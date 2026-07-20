@@ -4,6 +4,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../models/task_model.dart';
 import '../providers/task_provider.dart';
+import '../../calendar/screens/create_event_screen.dart';
 
 class CreateTaskScreen extends StatefulWidget {
   final DateTime? initialDueDate;
@@ -96,7 +97,49 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
     final provider = context.watch<TaskProvider>();
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Create Task")),
+      appBar: AppBar(
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            GestureDetector(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "Create Task",
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 4),
+                    height: 2,
+                    width: 80,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(width: 24),
+
+            GestureDetector(
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => const CreateEventScreen()),
+                );
+              },
+              child: const Text(
+                "Create Event",
+                style: TextStyle(color: Colors.grey),
+              ),
+            ),
+          ],
+        ),
+        centerTitle: true,
+      ),
       body: SafeArea(
         child: Form(
           key: _formKey,

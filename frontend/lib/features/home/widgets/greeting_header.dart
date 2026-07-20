@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import '../../../core/theme/app_text_styles.dart';
-import '../../../providers/user_provider.dart';
+import '../providers/dashboard_provider.dart';
 
 class GreetingHeader extends StatelessWidget {
   const GreetingHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final user = UserProvider.currentUser;
+    final dashboardProvider = context.watch<DashboardProvider>();
+    final dashboard = dashboardProvider.dashboard;
 
-    final greeting = _getGreeting();
+    final greeting = dashboard?.greeting ?? _getGreeting();
+
+    final userName = dashboard?.profile.fullName ?? "User";
 
     final date = DateFormat('EEEE, d MMMM yyyy').format(DateTime.now());
 
@@ -23,12 +27,10 @@ class GreetingHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "$greeting, ${user.name} 👋",
+                "$greeting, $userName 👋",
                 style: AppTextStyles.displayLarge,
               ),
-
               const SizedBox(height: 8),
-
               Text(date, style: AppTextStyles.bodySecondary),
             ],
           ),
@@ -46,7 +48,6 @@ class GreetingHeader extends StatelessWidget {
                   color: Colors.white,
                   size: 30,
                 ),
-
                 Positioned(
                   right: 2,
                   top: 2,
@@ -71,7 +72,6 @@ class GreetingHeader extends StatelessWidget {
                   radius: 22,
                   backgroundImage: AssetImage("assets/images/profile.png"),
                 ),
-
                 Positioned(
                   right: -1,
                   bottom: -1,
