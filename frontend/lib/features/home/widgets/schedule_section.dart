@@ -7,6 +7,7 @@ import '../../../core/widgets/glass_card.dart';
 import '../../calendar/screens/event_details_screen.dart';
 import '../providers/dashboard_provider.dart';
 import 'schedule_card.dart';
+import '../../calendar/screens/all_events_screen.dart';
 
 class ScheduleSection extends StatelessWidget {
   const ScheduleSection({super.key});
@@ -32,7 +33,10 @@ class ScheduleSection extends StatelessWidget {
               const Spacer(),
               TextButton(
                 onPressed: () {
-                  // TODO: Navigate to Calendar Screen
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const AllEventsScreen()),
+                  );
                 },
                 child: const Text("View all"),
               ),
