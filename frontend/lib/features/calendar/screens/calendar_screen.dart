@@ -97,6 +97,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       selectedDay: _selectedDay,
                       onDaySelected: _selectDay,
                       tasks: provider.allTasks,
+                      events: provider.allEvents,
                     ),
 
                     const SizedBox(height: 30),
