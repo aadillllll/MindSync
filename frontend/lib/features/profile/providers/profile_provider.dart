@@ -48,6 +48,25 @@ class ProfileProvider extends ChangeNotifier {
     }
   }
 
+  Future<bool> updateAvatar(String avatarUrl) async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      await _profileService.updateAvatarUrl(avatarUrl);
+
+      _profile = await _profileService.getCurrentProfile();
+
+      return true;
+    } catch (e) {
+      debugPrint("Avatar Update Error: $e");
+      return false;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
   Future<void> refreshProfile() async {
     _profile = await _profileService.getCurrentProfile();
     notifyListeners();

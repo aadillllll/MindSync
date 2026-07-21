@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-
+import '../../profile/providers/profile_provider.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../providers/dashboard_provider.dart';
 
@@ -11,6 +11,7 @@ class GreetingHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dashboardProvider = context.watch<DashboardProvider>();
+    final profile = context.watch<ProfileProvider>().profile;
     final dashboard = dashboardProvider.dashboard;
 
     final greeting = dashboard?.greeting ?? _getGreeting();
@@ -68,9 +69,15 @@ class GreetingHeader extends StatelessWidget {
             Stack(
               clipBehavior: Clip.none,
               children: [
-                const CircleAvatar(
+                CircleAvatar(
                   radius: 22,
-                  backgroundImage: AssetImage("assets/images/profile.png"),
+                  backgroundColor: const Color(0xFF7C5CFF),
+                  backgroundImage: profile?.avatarUrl != null
+                      ? NetworkImage(profile!.avatarUrl!)
+                      : null,
+                  child: profile?.avatarUrl == null
+                      ? const Icon(Icons.person, color: Colors.white, size: 22)
+                      : null,
                 ),
                 Positioned(
                   right: -1,

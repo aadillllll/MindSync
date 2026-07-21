@@ -67,4 +67,18 @@ class ProfileService {
 
     return response != null;
   }
+
+  /// Update only avatar URL
+  Future<void> updateAvatarUrl(String avatarUrl) async {
+    final user = _supabase.auth.currentUser;
+
+    if (user == null) {
+      throw Exception("User not logged in.");
+    }
+
+    await _supabase
+        .from('profiles')
+        .update({'avatar_url': avatarUrl})
+        .eq('id', user.id);
+  }
 }

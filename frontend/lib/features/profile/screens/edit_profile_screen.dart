@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'dart:io';
 
+import '../services/avatar_service.dart';
 import '../models/profile_model.dart';
 import '../providers/profile_provider.dart';
 import '../services/profile_service.dart'; // TODO: adjust path if different
@@ -52,6 +54,81 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     _courseController.dispose();
     _semesterController.dispose();
     super.dispose();
+  }
+
+  Future<void> _changeAvatar() async {
+    final source = await showModalBottomSheet<String>(
+      context: context,
+      backgroundColor: const Color(0xFF182135),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (context) {
+        return SafeArea(
+          child: Wrap(
+            children: [
+              ListTile(
+                leading: const Icon(Icons.photo_library, color: Colors.white),
+                title: const Text(
+                  "Gallery",
+                  style: TextStyle(color: Colors.white),
+                ),
+                onTap: () => Navigator.pop(context, "gallery"),
+              ),
+              ListTile(
+                leading: const Icon(Icons.camera_alt, color: Colors.white),
+                title: const Text(
+                  "Camera",
+                  style: TextStyle(color: Colors.white),
+                ),
+                onTap: () => Navigator.pop(context, "camera"),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+
+    if (source == null) return;
+
+    File? image;
+
+    if (source == "gallery") {
+      image = await AvatarService.instance.pickFromGallery();
+    } else {
+      image = await AvatarService.instance.pickFromCamera();
+    }
+
+    if (image == null) return;
+
+    try {
+      final url = await AvatarService.instance.uploadAvatar(image);
+
+      final provider = context.read<ProfileProvider>();
+
+      final success = await provider.updateAvatar(url);
+
+      if (!mounted) return;
+
+      if (success) {
+        setState(() {
+          _profile = provider.profile;
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Profile picture updated."),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString()), backgroundColor: Colors.red),
+      );
+    }
   }
 
   //-----------------------------------
@@ -171,10 +248,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         right: 0,
                         child: InkWell(
                           borderRadius: BorderRadius.circular(20),
-                          onTap: () {
-                            // Avatar upload
-                            // (Part 3)
-                          },
+                          onTap: _changeAvatar,
                           child: Container(
                             padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(

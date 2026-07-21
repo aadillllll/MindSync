@@ -197,15 +197,53 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
 
                 const SizedBox(height: 18),
 
-                ...analytics.goals.map(
-                  (goal) => GoalTile(
-                    icon: _goalIcon(goal.icon),
-                    color: _goalColor(goal.progress),
-                    title: goal.title,
-                    progress: goal.progress,
-                    percentage: "${(goal.progress * 100).round()}%",
+                if (analytics.goals.isEmpty)
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 32,
+                    ),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF182135),
+                      borderRadius: BorderRadius.circular(22),
+                      border: Border.all(color: Colors.white10),
+                    ),
+                    child: const Column(
+                      children: [
+                        Icon(
+                          Icons.flag_outlined,
+                          size: 52,
+                          color: Colors.white38,
+                        ),
+                        SizedBox(height: 16),
+                        Text(
+                          "No Goals Yet",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          "Create your first goal to start tracking your progress.",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.white60, height: 1.5),
+                        ),
+                      ],
+                    ),
+                  )
+                else
+                  ...analytics.goals.map(
+                    (goal) => GoalTile(
+                      icon: _goalIcon(goal.icon),
+                      color: _goalColor(goal.progress),
+                      title: goal.title,
+                      progress: goal.progress,
+                      percentage: "${(goal.progress * 100).round()}%",
+                    ),
                   ),
-                ),
 
                 const SizedBox(height: 30),
 
