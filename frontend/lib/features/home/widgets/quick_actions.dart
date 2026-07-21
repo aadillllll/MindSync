@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_text_styles.dart';
 
+import '../../goals/screens/goals_screen.dart';
+import '../../habits/screens/habits_screen.dart';
+import '../../notes/screens/notes_screen.dart';
 import '../../tasks/screens/task_screen.dart';
 
 import '../models/quick_action_dummy_data.dart';
 import 'quick_action_card.dart';
-import '../../goals/screens/goals_screen.dart';
-import '../../habits/screens/habits_screen.dart';
-import '../../notes/screens/notes_screen.dart';
 
 class QuickActions extends StatelessWidget {
   const QuickActions({super.key});
@@ -47,32 +47,71 @@ class QuickActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "Quick Actions",
-          style: AppTextStyles.title.copyWith(
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final width = constraints.maxWidth;
 
-        const SizedBox(height: 18),
+        final compact = width < 390;
 
-        Row(
-          children: quickActions
-              .map(
-                (action) => QuickActionCard(
-                  title: action.title,
-                  icon: action.icon,
-                  gradient: action.gradient,
-                  onTap: () => _handleTap(context, action.title),
-                ),
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Quick Actions",
+              style: AppTextStyles.title.copyWith(
+                fontSize: compact ? 20 : 22,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            SizedBox(height: compact ? 14 : 18),
+
+            if (!compact)
+              Row(
+                children: List.generate(quickActions.length, (index) {
+                  final action = quickActions[index];
+
+                  return Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        left: index == 0 ? 0 : 4,
+                        right: index == quickActions.length - 1 ? 0 : 4,
+                      ),
+                      child: QuickActionCard(
+                        title: action.title,
+                        icon: action.icon,
+                        gradient: action.gradient,
+                        onTap: () => _handleTap(context, action.title),
+                      ),
+                    ),
+                  );
+                }),
               )
-              .toList(),
-        ),
-      ],
+            else
+              GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: quickActions.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 12,
+                  childAspectRatio: 1.18,
+                ),
+                itemBuilder: (context, index) {
+                  final action = quickActions[index];
+
+                  return QuickActionCard(
+                    title: action.title,
+                    icon: action.icon,
+                    gradient: action.gradient,
+                    onTap: () => _handleTap(context, action.title),
+                  );
+                },
+              ),
+          ],
+        );
+      },
     );
   }
 }

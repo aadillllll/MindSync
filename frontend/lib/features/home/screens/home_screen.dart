@@ -12,7 +12,6 @@ import '../widgets/deadlines_section.dart';
 import '../widgets/schedule_section.dart';
 import '../widgets/habits_card.dart';
 import '../widgets/quick_actions.dart';
-import '../widgets/ai_assistant_card.dart';
 import '../widgets/productivity_section.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -89,9 +88,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(height: 30),
 
                   /// AI Assistant
-                  const AIAssistantCard(),
-
-                  const SizedBox(height: 50),
                 ],
               ),
             ),

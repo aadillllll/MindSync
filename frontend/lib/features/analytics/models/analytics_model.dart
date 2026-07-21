@@ -11,6 +11,8 @@ class AnalyticsModel {
 
   final int habitStreak;
 
+  final int completedGoals;
+
   final double focusHours;
 
   final double studyHours;
@@ -34,5 +36,6 @@ class AnalyticsModel {
     required this.goals,
     required this.achievements,
     required this.aiInsight,
+    required this.completedGoals,
   });
 }

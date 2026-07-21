@@ -71,6 +71,7 @@ class AnalyticsService {
     final habits = results[1] as List<HabitModel>;
     final habitLogs = results[2] as List<Map<String, dynamic>>;
     final goals = results[3] as List<GoalModel>;
+    final completedGoals = goals.where((goal) => goal.completed).length;
 
     // ===========================
     // TASKS
@@ -364,6 +365,8 @@ class AnalyticsService {
       achievements: achievements,
 
       aiInsight: insight,
+
+      completedGoals: completedGoals,
     );
   }
 }

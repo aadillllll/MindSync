@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/widgets/glass_card.dart';
+import '../../ai/screens/ai_screen.dart';
 
 class AIAssistantCard extends StatelessWidget {
   const AIAssistantCard({super.key});
@@ -72,7 +73,12 @@ class AIAssistantCard extends StatelessWidget {
                             borderRadius: BorderRadius.circular(14),
                           ),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => const AiScreen()),
+                          );
+                        },
                         child: const Text(
                           "Ask MindSync AI",
                           style: TextStyle(

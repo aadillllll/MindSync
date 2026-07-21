@@ -166,11 +166,6 @@ class AIDailyBriefingCard extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            const Icon(
-                              Icons.arrow_forward_ios_rounded,
-                              color: Colors.white54,
-                              size: 16,
-                            ),
                           ],
                         ),
                       ),

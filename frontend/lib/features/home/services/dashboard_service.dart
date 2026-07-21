@@ -27,12 +27,14 @@ class DashboardService {
 
   final CalendarService _calendarService = CalendarService();
 
-  Future<DashboardModel> getDashboard() async {
+  Future<DashboardModel> getDashboard({
+    AnalyticsPeriod period = AnalyticsPeriod.week,
+  }) async {
     final results = await Future.wait([
       _profileService.getCurrentProfile(),
       _taskService.getTasks(),
       _habitService.getHabits(),
-      _analyticsService.getAnalytics(period: AnalyticsPeriod.today),
+      _analyticsService.getAnalytics(period: period),
       _calendarService.getEvents(),
     ]);
 
